@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 작동환경
+    - type3
+    - 서비스 2개가 가동
+    - react + ts|js + next.js <->springboot(restapi 역할, 미들웨어역할)
+    - CSR
+    - next.js가 SSR SSG ISR처리
 
-## Getting Started
+# 작동 프로그램
+    - oracle , sql developer
+    - STS
+    - VSCODE
 
-First, run the development server:
+# 작동 시스템 버전
+    - next.js ver
+    - react
+    - typescript
+    - java 17
+    - spring boot
+    - oracle 18c
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# 시스템별 역할
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    ## Spring Boot
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+        - restAPI
+            - restAPI Controller
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+        - 로그인
+            - 세션로그인?
+                - 개발 난이도 낮음
+            - 스프링 시큐리티?
+                - 오래걸림
+                - 기본에 했던 코드에서 복사하면 그렇게 안걸릴지도?
 
-## Learn More
+        - DB와 연결
+            - Service
+                - 로그인관련                     
+                    - SpmallUserService
+                    - RefreshTokenService
+                    - TokenService
+                    - SecurityService
+                    - UtilService
+                    - TokenProvider
+                - 주소관련
+                    - SpmallAddressService
+                - 상품관련 
+                    - SpmallProductService
+                - 카트관련 
+                    - SpmallCartService
+                - 주문관련 
+                    - SpmallOrderRepository
+                - 상품리뷰 
+                    - SpmallProReviewService
+                    - SpmallProUserService
 
-To learn more about Next.js, take a look at the following resources:
+            - Repository
+                - 로그인관련 
+                    - SpmallUserRepository
+                    - RefreshTokenRepository
+                - 주소관련
+                    - SpmallAddressRepository
+                - 상품관련 
+                    - SpmallProductRepository
+                - 카트관련 
+                    - SpmallCartRepository
+                - 주문관련 
+                    - SpmallOrderRepository
+                - 상품리뷰 
+                    - SpmallProReviewRepository
+                    - SpmallProUserRepository
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+            - Entity
+                - SpmallUser 
+                - SpmallProduct
+                - SpmallProReview
+                - SpmallProUser
+                - SpmallCart
+                - SpmallOrder
+                - SpmallAddress
+                - RefreshToken
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+    ## Next.js
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+        - HTML로부터 입력을 전달
+            - 스프링부트 컨트롤러 역할해야함(라우팅, 스프링부트의 서비스와 연결)
+        - 홈페이지 레이아웃 설정
+            - MUI 사용 ToolPad
+            - 왼쪽에 있을 메뉴
+                - 장바구니 화면(로그인시 디비에서 불러와서 세션에 저장)
+                    - 그림 (카트)
+                - 오더 화면
+                    - 관리자용
+                    - 일반 이용자용
+                
+        - 홈페이지 화면
+            - 품목별 판매 순위표 => 디비에서 뽑아와서 만들 수 있을까?
+            - 품목별 구매 물품 * 구매가격 순위표 => 디비에서 뽑아서 만듬
+            - 상태변수로 방문자수 카운팅 하여 디비에 저장? 
+            - 장바구니에 들은 물품 => 디비에서 읽어와서 가격만 보여줌 => 마우스위로 올리는 이벤트 발생시? 마우스 클릭 이벤트 발생시? 장바구니 창 살짝 커지면서 들어있는 물품(수량 제한해야할듯)과 수량 가격 보여줌
+        
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+
+
+
