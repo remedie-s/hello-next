@@ -18,9 +18,9 @@ export const signup = async (userData:signupData)=>{
     }
 }
 
-export const login = async (userData:loginData)=>{
+export const login = async (loginUserData:loginData)=>{
     try{
-        const response = await axios.post(`{API_URL}/login`,userData, {
+        const response = await axios.post(`${API_URL}/login`,loginUserData, {
             headers :{
                 'Content-Type' :'application/json',
             },

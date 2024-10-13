@@ -5,7 +5,7 @@ export type signupData={
     firstName:string;
     lastName:string;
     phoneNumber:string;
-    eMail:string;
+    email:string;
 }
 export type loginData = {
     username:string;
