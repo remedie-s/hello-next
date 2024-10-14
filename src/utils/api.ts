@@ -1,13 +1,13 @@
 import axios from "axios";
 import {loginData,signupData} from '../types/datatype'
 
-const API_URL =  'http://localhost:8080/spmallUser'; // spring boot 유저 처리 페이지
+const API_URL =  'http://localhost:8080'; // spring boot 유저 처리 페이지
 
 
 
 export const signup = async (userData:signupData)=>{
     try{
-        const response = await axios.post(`${API_URL}/signup`,userData, {
+        const response = await axios.post(`${API_URL}/spmallUser/signup`,userData, {
             headers :{
                 'Content-Type' :'application/json',
             },
@@ -20,7 +20,7 @@ export const signup = async (userData:signupData)=>{
 
 export const login = async (loginUserData:loginData)=>{
     try{
-        const response = await axios.post(`${API_URL}/login`,loginUserData, {
+        const response = await axios.post(`${API_URL}/spmallUser/login`,loginUserData, {
             headers :{
                 'Content-Type' :'application/json',
             },
