@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Paper } from '@mui/material';
-import { productList } from '../../utils/api'; // productList 함수 임포트
-
+import { Box, Grid2 as Grid, Paper } from '@mui/material';
+import { productList } from '../../utils/api'; 
+import { productCate } from '@/types/productCate';
+// import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/router'; // useRouter를 임포트
+import Link from 'next/link'; // Link 임포트
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff",
   ...theme.typography.body2,
@@ -15,37 +18,30 @@ const Item = styled(Paper)(({ theme }) => ({
   }),
 }));
 
-interface Product {
-  id: number;
-  productName: string;
-  price: number;
-  imageUrl: string;
-}
-
 const All = ({ category }: { category: string }) => {
-  const [items, setItems] = useState<Product[]>([]);  // 상태로 items 정의 (타입은 Product 배열)
-  const [error, setError] = useState<string | null>(null); // 오류 상태
+  // const navigate = useNavigate(); // useNavigate 사용 - 에러떠서 라우터로 바뀜
+  const router = useRouter(); // useRouter 사용
+  const [items, setItems] = useState<productCate[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  // useEffect로 API 요청
   useEffect(() => {
     const fetchItems = async () => {
-        try {
-          const response = await productList(category);
-          const data = response.items || []; // 'items' 키가 배열을 포함한다고 가정
-          setItems(data);
-        } catch (error) {
-          setError('상품 데이터를 불러오는데 실패했습니다.');
-          console.error(error);
-        }
-      };
-      
+      try {
+        const response = await productList(`${category}`);
+        const data = response || [];
+        setItems(data);
+      } catch (error) {
+        setError('상품 데이터를 불러오는데 실패했습니다.');
+        console.error(error);
+      }
+    };
 
-    fetchItems();  // 컴포넌트가 렌더링될 때 데이터 요청
-  }, [category]); // category가 변경될 때마다 호출
+    fetchItems();
+  }, [category]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      {error && <div style={{ color: 'red' }}>{error}</div>} {/* 오류 메시지 표시 */}
+      {error && <div style={{ color: 'red' }}>{error}</div>}
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
@@ -53,11 +49,14 @@ const All = ({ category }: { category: string }) => {
       >
         {items.map((item) => (
           <Grid item key={item.id} xs={2} sm={4} md={4}>
-            <Item>
+             <Link href={`/product/detail/${item.id}`} passHref>
+              <Item> 
+               {/* onClick={() => router.push(`/product/detail/${item.id}`)}> //클릭 시 페이지 이동 */}
               <img src={item.imageUrl} alt={item.productName} style={{ height: 100, width: 100 }} />
               <div>{item.productName}</div>
               <div>{item.price}</div>
             </Item>
+            </Link>
           </Grid>
         ))}
       </Grid>

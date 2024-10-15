@@ -5,16 +5,17 @@ const ProductCreatePage: FC = () => {
   const [formData, setFormData] = useState({
     productName: "",
     description: "",
-    price: 0,
-    quantity: 0,
+    price: "",
+    quantity: "",
     imageUrl: "",
-    category: "",
+    category: "grocery",// 기본 선택 값을 "grocery"로 설정
   });
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  // HTMLInputElement와 HTMLSelectElement 모두 처리 가능 이렇게 해야 이벤트 처리가능
+  const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => { 
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -25,14 +26,21 @@ const ProductCreatePage: FC = () => {
     setSuccess(null);
     console.log(formData);
 
+     // 숫자 필드를 string에서 number로 변환
+     const productData = {
+      ...formData,
+      price: parseInt(formData.price),   // price를 숫자로 변환
+      quantity: parseInt(formData.quantity), // quantity를 숫자로 변환
+    };
+
     try {
-      const result = await productReg(formData);
+      const result = await productReg(productData);
       setSuccess(`물품이 등록되었습니다 : ${result.productName}`);
       setFormData({
         productName: "",
         description: "",
-        price: 0,
-        quantity: 0,
+        price:  "",
+        quantity:  "",
         imageUrl: "",
         category: "",
       });
@@ -84,13 +92,20 @@ const ProductCreatePage: FC = () => {
           onChange={handleChange}
           required
         />
-        <input
+        <select
           name="category"
-          placeholder="category"
           value={formData.category}
           onChange={handleChange}
           required
-        />
+        >
+          <option value="" disabled>
+            카테고리를 선택하세요
+          </option>
+          <option value="elect">전자제품</option>
+          <option value="furniture">가구</option>
+          <option value="grocery" >식료품</option>
+          <option value="toy">장난감</option>
+        </select>
 
         <button type="submit">물품등록</button>
       </form>

@@ -50,6 +50,7 @@ import LoginPage from '@/pages/login';
 import SignupPage from '@/pages/signup';
 import ProductCreatePage from '@/pages/productCreate';
 import All from '@/pages/product/all';
+import ProductDetailPage from '@/pages/ProdcutDetailPage';
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
@@ -207,6 +208,7 @@ function DemoPageContent({ pathname }: IPage) {
       <Typography>Dashboard content for {pathname}</Typography>
       {isProductPage && category === 'all' && <All category="all" />}
       {isProductPage && category && category !== 'all' && <All category={category} />}
+      {pathname ==='/product/detail/1' &&<ProductDetailPage/>}
       {
         pathname ==='/login'&&<LoginPage/>
       }
@@ -220,43 +222,8 @@ function DemoPageContent({ pathname }: IPage) {
   );
 }
 
-
 export default function DashboardLayoutBasic(props: DemoProps) {
-  // TODO 페이지 이동관련
-  // const navigate = useNavigate();
-
-  // // TODO 세션 체크 <= 컴포넌트가 보일려고 한다
-  // React.useEffect(()=>{
-  //   //1. 세션 획득
-  //   const {uid} =getSession();
-  //   //2. 세션 판단
-  //   if(uid===''){
-  //     //3. 세션이 없다면 => 로그인페이지 이동 => react-route-dom에서 제공(프로그램 적으로 페이지 이동)
-  //       navigate('/login');
-  //   }
-  //   else{
-
-  //   }
-    
-  // },[navigate])
-  const { window } = props;
-  // 명확한 타입이라, 타입추론이 가능하므로 타입 주석 생략 가능하다
-  // const [pathname, setPathname] = React.useState<string>('/dashboard');
-  // 상태변수, 홈페이지의 첫화면, 최초 로드된 페이지 주소 설정
-  const [pathname, setPathname] = React.useState('/dashboard'); 
-  // React.useEffect(()=>{
-  //   // pathname이 변경되면 호출된다, 이 부분이 수행된다.
-  //   if(pathname==='/logout'){
-  //     // 사용자가 로그아웃을 클릭했다 => 이벤트를 감지 => useEffect() 호출됨
-  //     //1. 세션 삭제
-  //     removeSession();
-  //     //2. 알림창 
-  //     alert('로그아웃 되었습니다');
-  //     //3. 로그인 화면 이동
-  //     navigate('/login');
-  //   }
-  // },[pathname])
-
+  const [pathname, setPathname] = React.useState('/dashboard');
   const router = React.useMemo<Router>(() => {
     return {
       pathname,
@@ -265,21 +232,15 @@ export default function DashboardLayoutBasic(props: DemoProps) {
     };
   }, [pathname]);
 
-  // Remove this const when copying and pasting into your project.
-  const demoWindow = window !== undefined ? window() : undefined;
-
   return (
-    // preview-start
     <AppProvider
       navigation={NAVIGATION}
       router={router}
       theme={demoTheme}
-      window={demoWindow}
     >
       <DashboardLayout>
         <DemoPageContent pathname={pathname} />
       </DashboardLayout>
     </AppProvider>
-    // preview-end
   );
 }
