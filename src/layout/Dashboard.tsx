@@ -19,6 +19,7 @@ import ShopIcon from '@mui/icons-material/Shop';
 import ComputerIcon from '@mui/icons-material/Computer';
 import ToysIcon from '@mui/icons-material/Toys';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import InputIcon from '@mui/icons-material/Input';
 import HomeIcon from '@mui/icons-material/Home';
 import ChairIcon from '@mui/icons-material/Chair';
 import StoreIcon from '@mui/icons-material/Store';
@@ -47,6 +48,9 @@ import type {
 import ResponsiveGrid from './ResponsiveGrid';
 import LoginPage from '@/pages/login';
 import SignupPage from '@/pages/signup';
+import ProductCreatePage from '@/pages/productCreate';
+import All from '@/pages/product/all';
+
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
 
@@ -76,6 +80,11 @@ const NAVIGATION: Navigation = [
   {
     kind: 'header',
     title: '판매 물품',
+  },
+  {
+    segment: 'productCreate',
+    title: '물품등록',
+    icon: <InputIcon />,
   },
   {
     segment: 'product',
@@ -182,6 +191,9 @@ const demoTheme = createTheme({
 //function DemoPageContent(props : { pathname: string }){
 //function DemoPageContent(props : 타입){
 function DemoPageContent({ pathname }: IPage) {
+  const isProductPage = pathname.startsWith('/product/');
+  const category = isProductPage ? pathname.split('/')[2] : null; // '/product/' 다음의 부분이 카테고리
+
   return (
     <Box
       sx={{
@@ -193,14 +205,16 @@ function DemoPageContent({ pathname }: IPage) {
       }}
     >
       <Typography>Dashboard content for {pathname}</Typography>
-      {
-        pathname ==='/product/all'&&<ResponsiveGrid/>
-      }
+      {isProductPage && category === 'all' && <All category="all" />}
+      {isProductPage && category && category !== 'all' && <All category={category} />}
       {
         pathname ==='/login'&&<LoginPage/>
       }
       {
         pathname ==='/signup'&&<SignupPage/>
+      }
+      {
+        pathname ==='/productCreate'&&<ProductCreatePage/>
       }
     </Box>
   );

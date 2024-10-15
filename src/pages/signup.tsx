@@ -31,8 +31,18 @@ const SignupPage :FC = () =>{
         try{
             const result = await signup(formData);
             setSuccess(result);
+            const { id, username,accessToken,refreshToken } = result;
+            setSuccess(`환영합니다, ${username}님! 당신의 ID는 ${id}입니다.`);
+            console.log("User ID:", id);
+            console.log("Username:", username);
+            // 세션 스토리지에 저장
+            sessionStorage.setItem("userId", id);
+            sessionStorage.setItem("username", username);
+            sessionStorage.setItem("accessToken", accessToken);
+            sessionStorage.setItem("refreshToken", refreshToken);
+      
             setFormData({
-                username:'',
+            username:'',
             password1:'',
             password2:'',
             firstName:'',

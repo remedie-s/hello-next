@@ -8,6 +8,6 @@ export interface ProductDetail{
     quantity:number,
     imageUrl:string,
     createDate:Date,
-    category:number,
+    category:string,
     sellCount:number
 }

@@ -11,11 +11,11 @@
     - VSCODE
 
 # 작동 시스템 버전
-    - next.js ver
-    - react
+    - node ver v20.17.0
+    - next.js ver 14.2.13
     - typescript
     - java 17
-    - spring boot
+    - spring boot 3.3.4
     - oracle 18c
 
 # 시스템별 역할
@@ -26,15 +26,15 @@
             - restAPI Controller
 
         - 로그인
-            - 스프링 시큐리티?
-                - 오래걸림
-                - 기본에 했던 코드에서 복사하면 그렇게 안걸릴지도?
+            - 스프링 시큐리티
 
-        - DB와 연결
+        - 로그인 및 DB와 연결위한 SpringBoot 구성
             - Config
                 - JwtProperties
                 - SecurityConfig
                 - TokenAuthenticationFilter
+                - LoginResponse // 로그인 정보
+                - WebConfig // CORS 설정
             - Service
                 - 로그인관련                     
                     - SpmallUserService
@@ -52,7 +52,7 @@
                     - SpmallOrderRepository
                 - 상품리뷰 
                     - SpmallProReviewService
-                    - SpmallProUserService
+                    - SpmallProUserService 구매시 상품 구매자리스트에 넣어 상품 리뷰를 달 수 있는 권한 주기 위함
 
             - Repository
                 - 로그인관련 
@@ -71,6 +71,11 @@
                     - SpmallProUserRepository
 
             - DTO
+                - SpmallProductForm
+                - SpmallProdcutReviewForm
+                - SpmallUserForm
+                - SpmallUserLoginForm
+
                 - 필요시 만듬
 
             - Entity
@@ -84,7 +89,7 @@
                 - RefreshToken
             
             - Exception
-                - exception
+                - DataNotFoundException
 
 
     ## Next.js
