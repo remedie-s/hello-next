@@ -1,7 +1,21 @@
+"use client"
 import Image from "next/image";
 import styles from "./page.module.css";
-
+import { useRouter } from "next/navigation"; // next/router 에서 떙겨오면 에러남
+import React from "react";
 export default function Home() {
+  const router = useRouter();
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      // 브라우저 환경에서만 router.push 호출
+      if (typeof window !== 'undefined') {
+        router.push("/Main"); // 상대 경로 사용
+      }
+    }, 1000 * 3);
+
+    return () => clearInterval(interval); // 클리어 함수
+  }, [router])
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>

@@ -47,15 +47,15 @@ const All = ({ category }: { category: string }) => {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {items.map((item) => (
-          <Grid item key={item.id} xs={2} sm={4} md={4}>
-             <Link href={`/product/detail/${item.id}`} passHref>
-              <Item> 
-               {/* onClick={() => router.push(`/product/detail/${item.id}`)}> //클릭 시 페이지 이동 */}
-              <img src={item.imageUrl} alt={item.productName} style={{ height: 100, width: 100 }} />
-              <div>{item.productName}</div>
-              <div>{item.price}</div>
-            </Item>
+       {items.map((item) => (
+        // 오류 고치는 방법모르겠음
+          <Grid item key={item.id} xs={2} sm={4} md={4} component="div">
+            <Link href={`/product/detail/${item.id}`} passHref>
+              <Item>
+                <img src={item.imageUrl} alt={item.productName} style={{ height: 100, width: 100 }} />
+                <div>{item.productName}</div>
+                <div>{item.price}</div>
+              </Item>
             </Link>
           </Grid>
         ))}
