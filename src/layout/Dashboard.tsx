@@ -5,177 +5,173 @@
  *    - 세션 획득, 세션 제거, 세션 추가 및 설정(업데이트)
  *  - 로그인
  */
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { createTheme } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import RestaurantIcon from '@mui/icons-material/Restaurant';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
-import LoginIcon from '@mui/icons-material/Login';
-import LogoutIcon from '@mui/icons-material/Logout';
-import ShopIcon from '@mui/icons-material/Shop';
-import ComputerIcon from '@mui/icons-material/Computer';
-import ToysIcon from '@mui/icons-material/Toys';
-import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import InputIcon from '@mui/icons-material/Input';
-import HomeIcon from '@mui/icons-material/Home';
-import ChairIcon from '@mui/icons-material/Chair';
-import StoreIcon from '@mui/icons-material/Store';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { createTheme } from "@mui/material/styles";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ShopIcon from "@mui/icons-material/Shop";
+import ComputerIcon from "@mui/icons-material/Computer";
+import ToysIcon from "@mui/icons-material/Toys";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import InputIcon from "@mui/icons-material/Input";
+import HomeIcon from "@mui/icons-material/Home";
+import ChairIcon from "@mui/icons-material/Chair";
+import StoreIcon from "@mui/icons-material/Store";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import DescriptionIcon from "@mui/icons-material/Description";
+import LayersIcon from "@mui/icons-material/Layers";
+import { AppProvider } from "@toolpad/core/AppProvider";
+import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 // UI 컴포넌트에 사용 되는 타입
-import { type Router, type Navigation, SignInPage } from '@toolpad/core';
+import { type Router, type Navigation, SignInPage } from "@toolpad/core";
 //TODO 세션관련 내용 획득
 import {
-  getSession,//세션 체크용
-  removeSession,//로그아웃용
-  setSession
-} from '../utils'
+  getSession, //세션 체크용
+  removeSession, //로그아웃용
+  setSession,
+} from "../utils";
 //페이지 이동관련
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 // 타입가져오기
-import type {
-  DemoProps,
-  IPage
-
-} from '../types'
-import ResponsiveGrid from './ResponsiveGrid';
-import LoginPage from '@/pages/login';
-import SignupPage from '@/pages/signup';
-import ProductCreatePage from '@/pages/productCreate';
-import All from '@/pages/product/all';
-import ProductDetailPage from '@/pages/ProdcutDetailPage';
+import type { DemoProps, IPage } from "../types";
+import ResponsiveGrid from "./ResponsiveGrid";
+import LoginPage from "@/pages/login";
+import SignupPage from "@/pages/signup";
+import ProductCreatePage from "@/pages/productCreate";
+import All from "@/pages/product/[category]";
+import DetailPage  from "../pages/product/detail/[id]"
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
 
 const NAVIGATION: Navigation = [
   {
-    kind: 'header',
-    title: '로그인 정보',
+    kind: "header",
+    title: "로그인 정보",
   },
   {
-    segment: 'signup',
-    title: '회원 가입',
+    segment: "signup",
+    title: "회원 가입",
     icon: <LockOpenIcon />,
   },
   {
-    segment: 'login',
-    title: '로그인',
+    segment: "login",
+    title: "로그인",
     icon: <LoginIcon />,
   },
   {
-    segment: 'logout',
-    title: '로그아웃',
+    segment: "logout",
+    title: "로그아웃",
     icon: <LogoutIcon />,
   },
   {
-    kind: 'divider',
+    kind: "divider",
   },
   {
-    kind: 'header',
-    title: '판매 물품',
+    kind: "header",
+    title: "판매 물품",
   },
   {
-    segment: 'productCreate',
-    title: '물품등록',
+    segment: "productCreate",
+    title: "물품등록",
     icon: <InputIcon />,
   },
   {
-    segment: 'product',
-    title: '판매 물품',
+    segment: "product",
+    title: "판매 물품",
     icon: <StoreIcon />,
     children: [
       {
-        segment: 'all',
-        title: '전체',
+        segment: "all",
+        title: "전체",
         icon: <ShopIcon />,
       },
       {
-        segment: 'grocery',
-        title: '식품',
+        segment: "grocery",
+        title: "식품",
         icon: <RestaurantIcon />,
       },
       {
-        segment: 'furniture',
-        title: '가구',
+        segment: "furniture",
+        title: "가구",
         icon: <ChairIcon />,
       },
       {
-        segment: 'elect',
-        title: '전자 제품',
+        segment: "elect",
+        title: "전자 제품",
         icon: <ComputerIcon />,
       },
       {
-        segment: 'toy',
-        title: '완구',
+        segment: "toy",
+        title: "완구",
         icon: <ToysIcon />,
       },
     ],
   },
-  
+
   {
-    kind: 'divider',
+    kind: "divider",
   },
   {
-    kind: 'header',
-    title: '주문 및 카트',
+    kind: "header",
+    title: "주문 및 카트",
   },
   {
-    segment: 'carts',
-    title: '카트',
+    segment: "carts",
+    title: "카트",
     icon: <ShoppingCartIcon />,
   },
   {
-    segment: 'orders',
-    title: '주문',
+    segment: "orders",
+    title: "주문",
     icon: <ShoppingBagIcon />,
   },
   {
-    segment: 'address',
-    title: '주소 설정',
+    segment: "address",
+    title: "주소 설정",
     icon: <HomeIcon />,
   },
   {
-    kind: 'divider',
+    kind: "divider",
   },
   {
-    kind: 'header',
-    title: '통계',
+    kind: "header",
+    title: "통계",
   },
   {
-    segment: 'reports',
-    title: 'Reports',
+    segment: "reports",
+    title: "Reports",
     icon: <BarChartIcon />,
     children: [
       {
-        segment: 'sales',
-        title: 'Sales',
+        segment: "sales",
+        title: "Sales",
         icon: <DescriptionIcon />,
       },
       {
-        segment: 'traffic',
-        title: 'Traffic',
+        segment: "traffic",
+        title: "Traffic",
         icon: <DescriptionIcon />,
       },
     ],
   },
   {
-    segment: 'integrations',
-    title: 'Integrations',
+    segment: "integrations",
+    title: "Integrations",
     icon: <LayersIcon />,
   },
 ];
 
 const demoTheme = createTheme({
   cssVariables: {
-    colorSchemeSelector: 'data-toolpad-color-scheme',
+    colorSchemeSelector: "data-toolpad-color-scheme",
   },
   colorSchemes: { light: true, dark: true },
   breakpoints: {
@@ -192,38 +188,44 @@ const demoTheme = createTheme({
 //function DemoPageContent(props : { pathname: string }){
 //function DemoPageContent(props : 타입){
 function DemoPageContent({ pathname }: IPage) {
-  const isProductPage = pathname.startsWith('/product/');
-  const category = isProductPage ? pathname.split('/')[2] : null; // '/product/' 다음의 부분이 카테고리
+  const isProductPage = pathname.startsWith("/product/");
+  const category = isProductPage ? pathname.split("/")[2] : null; // '/product/' 다음의 부분이 카테고리
 
   return (
     <Box
       sx={{
         py: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        textAlign: "center",
       }}
     >
       <Typography>Dashboard content for {pathname}</Typography>
-      {isProductPage && category === 'all' && <All category="all" />}
-      {isProductPage && category && category !== 'all' && <All category={category} />}
-      {pathname ==='/product/detail/1' &&<ProductDetailPage/>}
-      {
-        pathname ==='/login'&&<LoginPage/>
-      }
-      {
-        pathname ==='/signup'&&<SignupPage/>
-      }
-      {
-        pathname ==='/productCreate'&&<ProductCreatePage/>
-      }
+      
+
+      {/* 특정 카테고리를 위한 부분 category가 all 이면 스프링 컨트롤러에서 처리해서 모든 상품을 보내줌*/}
+      {isProductPage && category && (
+        <All category={category} />
+      )}
+
+      {/* 상품 상세 페이지 */}
+      {pathname.startsWith("/product/detail/") && <DetailPage/>}
+
+      {/* 로그인 페이지 */}
+      {pathname === "/login" && <LoginPage />}
+
+      {/* 회원가입 페이지 */}
+      {pathname === "/signup" && <SignupPage />}
+
+      {/* 상품 생성 페이지 */}
+      {pathname === "/productCreate" && <ProductCreatePage />}
     </Box>
   );
 }
 
 export default function DashboardLayoutBasic(props: DemoProps) {
-  const [pathname, setPathname] = React.useState('/dashboard');
+  const [pathname, setPathname] = React.useState("/dashboard");
   const router = React.useMemo<Router>(() => {
     return {
       pathname,
@@ -233,11 +235,7 @@ export default function DashboardLayoutBasic(props: DemoProps) {
   }, [pathname]);
 
   return (
-    <AppProvider
-      navigation={NAVIGATION}
-      router={router}
-      theme={demoTheme}
-    >
+    <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
       <DashboardLayout>
         <DemoPageContent pathname={pathname} />
       </DashboardLayout>

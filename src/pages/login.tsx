@@ -105,8 +105,8 @@ const LoginPage: React.FC = () => {
       // 세션 스토리지에 저장
       sessionStorage.setItem("userId", id);
       sessionStorage.setItem("username", username);
-      // sessionStorage.setItem("accessToken", accessToken);
-      // sessionStorage.setItem("refreshToken", refreshToken);
+      sessionStorage.setItem("accessToken", accessToken);
+      sessionStorage.setItem("refreshToken", refreshToken);
 
       // 로그인 성공 시 리다이렉트
       // router.push('/');

@@ -27,7 +27,9 @@ export type prouctToCartData = {
 export type product= {
     id: number;
   productName: string;
+  description: string;
   price: number;
+  quantity: number;
   imageUrl: string;
 
 }
