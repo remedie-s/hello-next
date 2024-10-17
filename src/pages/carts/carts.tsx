@@ -44,10 +44,10 @@ const CartGrid = () => {
 
     try {
       const response = await cartDelete(cartData);
-      console.log('Delete response:', response);
+      console.log('삭제 요청:', response);
       setRows(response);
     } catch (error) {
-      console.error('Error deleting cart:', error);
+      console.error('카트 삭제 오류:', error);
     }
   };
   const columns: GridColDef[] = [
@@ -100,7 +100,7 @@ const CartGrid = () => {
       headerName: '삭제',
       width: 100,
       renderCell: (params) => (
-        <button onClick={() => handleRemove(params.row.id)}>삭제</button>
+        <button onClick={() => handleRemove(params.row)}>삭제</button>
       ),
     },
   ];

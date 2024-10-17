@@ -1,3 +1,4 @@
+"use client"
 import { useState, FC, ChangeEvent, FormEvent } from "react";
 import { addressReg } from "../../utils/api";
 import TextField from "@mui/material/TextField";

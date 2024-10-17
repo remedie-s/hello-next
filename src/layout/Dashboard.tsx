@@ -50,6 +50,7 @@ import DetailPage  from "../pages/product/detail/[id]"
 import CartGrid from "@/pages/carts/carts";
 import OrderGrid from "@/pages/orders/orders";
 import AddressCreatePage from "@/pages/address/addressCreate";
+import ProductDetailPage from "@/pages/ProdcutDetailPage";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
@@ -213,7 +214,7 @@ function DemoPageContent({ pathname }: IPage) {
       )}
 
       {/* 상품 상세 페이지 */}
-      {pathname.startsWith("/product/detail/") && <DetailPage/>}
+      {pathname.startsWith("/product/detail/") && <ProductDetailPage/>}
 
       {/* 로그인 페이지 */}
       {pathname === "/login" && <LoginPage />}

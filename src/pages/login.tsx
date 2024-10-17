@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react";
 import { login } from "../utils/api";
 import { useRouter } from "next/router";

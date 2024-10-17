@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { productDetail, productToCart } from "../../../utils/api";
@@ -8,6 +9,7 @@ import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import DashboardLayoutBasic from "@/layout/Dashboard";
 
 const ProductDetail = () => {
   const router = useRouter();
@@ -55,6 +57,9 @@ const ProductDetail = () => {
     try {
       await productToCart(cartForm);
       setSuccessMessage("장바구니에 상품이 추가되었습니다.");
+      setTimeout(() => {
+        router.push("/Main"); // 또는 원하는 메인 페이지의 경로로 수정
+    }, 1000); // 1000 밀리초 = 1초
     } catch (error: any) {
       setError(error.message || "장바구니 추가 중 오류가 발생했습니다.");
     }
