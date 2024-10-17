@@ -47,6 +47,9 @@ import SignupPage from "@/pages/signup";
 import ProductCreatePage from "@/pages/productCreate";
 import All from "@/pages/product/[category]";
 import DetailPage  from "../pages/product/detail/[id]"
+import CartGrid from "@/pages/carts/carts";
+import OrderGrid from "@/pages/orders/orders";
+import AddressCreatePage from "@/pages/address/addressCreate";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
@@ -134,7 +137,7 @@ const NAVIGATION: Navigation = [
     icon: <ShoppingBagIcon />,
   },
   {
-    segment: "address",
+    segment: "addressCreate",
     title: "주소 설정",
     icon: <HomeIcon />,
   },
@@ -218,8 +221,18 @@ function DemoPageContent({ pathname }: IPage) {
       {/* 회원가입 페이지 */}
       {pathname === "/signup" && <SignupPage />}
 
+      {/* 회원가입 페이지 */}
+      {pathname === "/addressCreate" && <AddressCreatePage />}  
+
       {/* 상품 생성 페이지 */}
       {pathname === "/productCreate" && <ProductCreatePage />}
+
+      {/* 카트 페이지 */}
+      {pathname === "/carts" && <CartGrid />}
+      
+      {/* 오더 페이지 */}
+      {pathname === "/orders" && <OrderGrid />}
+
     </Box>
   );
 }

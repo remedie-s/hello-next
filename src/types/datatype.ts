@@ -11,7 +11,13 @@ export type loginData = {
     username:string;
     password:string;
 }
-export type prouctRegData = {
+export type addressRegData = {
+    buildingNumber: number,
+    city: string,
+    detailAddress: string,
+    streetName: string,
+}
+export type productRegData = {
     productName:string;
     description:string;
     price:number;

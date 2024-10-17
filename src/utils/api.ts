@@ -1,5 +1,5 @@
 import axios from "axios";
-import {loginData,signupData,prouctRegData,prouctToCartData} from '../types/datatype'
+import {loginData,signupData,prouctToCartData, addressRegData, productRegData} from '../types/datatype'
 
 const API_URL =  'http://localhost:8080'; // spring boot 유저 처리 페이지
 const api = axios.create({
@@ -42,7 +42,19 @@ export const login = async (loginUserData:loginData)=>{
         throw error.response.data; // 실패시
     }
 }
-export const productReg = async (productData:prouctRegData)=>{
+export const addressReg = async (addressData:addressRegData)=>{
+    try{
+        const response = await api.post(`${API_URL}/api/address/create`,addressData, {
+            headers :{
+                'Content-Type' :'application/json',
+            },
+        });
+        return response.data; // 성공시
+    } catch(error:any){
+        throw error.response.data; // 실패시
+    }
+}
+export const productReg = async (productData:productRegData)=>{
     try{
         const response = await api.post(`${API_URL}/api/product/create`,productData, {
             headers :{
@@ -91,7 +103,7 @@ export const productToCart = async (productData:prouctToCartData)=>{
 } // product 데이터에 담아서 보내야함
 
 export const cartList = async (userid:number)=>{
-    try{const response = await api.get(`${API_URL}/api/cart/list/${userid}`,{
+    try{const response = await api.get(`${API_URL}/api/cart/list/`,{
         headers :{
             'Content-Type' :'application/json',
         },
@@ -102,7 +114,7 @@ export const cartList = async (userid:number)=>{
     }    
 }
 export const orderList = async (userid:number)=>{
-    try{const response = await api.get(`${API_URL}/api/order/list/${userid}`,{
+    try{const response = await api.get(`${API_URL}/api/order/list/`,{
         headers :{
             'Content-Type' :'application/json',
         },
@@ -112,8 +124,8 @@ export const orderList = async (userid:number)=>{
         throw error.response.data; // 실패시
     }    
 }
-export const orderListBySeller = async (userid:number)=>{//인증정보는 스프링 시큐리티에서구분
-    try{const response = await api.get(`${API_URL}/api/order/seller/${userid}`,{
+export const orderListBySeller = async ()=>{//인증정보는 스프링 시큐리티에서구분
+    try{const response = await api.get(`${API_URL}/api/order/admin`,{
         headers :{
             'Content-Type' :'application/json',
         },
