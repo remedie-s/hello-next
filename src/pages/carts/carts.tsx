@@ -1,23 +1,27 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { cartDelete, cartList, cartModify, OrderToCart } from '../../utils/api'; 
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
 import { product } from '@/types/datatype';
 import { useRouter } from 'next/router';
 
+interface CartItem {
+  id: number;
+  imageUrl: string;
+  productName: string;
+  price: number;
+  quantity: number;
+}
 
-const CartGrid = () => {
+const CartGrid: React.FC = () => {
   const router = useRouter();
-  const [rows, setRows] = React.useState([]);
-  const [product, setProduct] = React.useState<product | null>(null);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
-  const [quantity, setQuantity] = React.useState<number>(1);
+  const [rows, setRows] = React.useState<CartItem[]>([]);
+  const [selectedRows, setSelectedRows] = React.useState<GridRowId[]>([]); // 선택된 행의 ID를 저장할 상태
+
   const fetchCartList = async () => {
     try {
-      const response = await cartList();
+      const response: CartItem[] = await cartList();
       console.log('Fetched cart list:', response);
       setRows(response);
     } catch (error) {
@@ -29,14 +33,14 @@ const CartGrid = () => {
     fetchCartList();
   }, []);
 
-  const handleModify = async (row:any) => {
+  const handleModify = async (row: CartItem) => {
     const updatedCartData = {
       id: row.id,
-      quantity: row.quantity, // 수정할 수량
+      quantity: row.quantity,
     };
 
     try {
-      const response = await cartModify(updatedCartData);
+      const response: CartItem[] = await cartModify(updatedCartData);
       console.log('Modify response:', response);
       setRows(response);
     } catch (error) {
@@ -44,51 +48,55 @@ const CartGrid = () => {
     }
   };
 
-  const handleRemove = async (row:any) => {
+  const handleRemove = async (row: CartItem) => {
     const cartData = {
       id: row.id,
-      quantity: row.quantity, //  그냥 같이 보냄
+      quantity: row.quantity,
     };
 
     try {
-      const response = await cartDelete(cartData);
+      const response: CartItem[] = await cartDelete(cartData);
       console.log('삭제 요청:', response);
       setRows(response);
     } catch (error) {
       console.error('카트 삭제 오류:', error);
     }
   };
+
   const handleCartToOrder = async () => {
-    console.log('주문시작')
-    if (!product) return;
+    console.log('주문 시작');
     const userId = sessionStorage.getItem("userId");
 
     if (!userId) {
-      setError("사용자 ID가 필요합니다.");
+      console.error("사용자 ID가 필요합니다.");
       return;
     }
 
-    const orderForm = {
-      productId: product.id,
-      userId: Number(userId),
-      quantity: quantity,
-    };
+    // 선택된 제품의 정보 가져오기
+    const orderForms = selectedRows.map(id => {
+      const row = rows.find(item => item.id === id);
+      return {
+        productId: row?.id,
+        userId: Number(userId),
+        quantity: row?.quantity,
+      };
+    }).filter(item => item.productId); // productId가 존재하는 항목만 필터링
 
     try {
-      await OrderToCart(orderForm);
-      setSuccessMessage("주문 되었습니다.");
+      await Promise.all(orderForms.map(orderForm => OrderToCart(orderForm))); // 모든 주문 요청 보내기
+      console.log("주문 되었습니다.");
       setTimeout(() => {
-        router.push("/Main"); // 또는 원하는 메인 페이지의 경로로 수정
-    }, 1000); // 1000 밀리초 = 1초
+        router.push("/Main");
+      }, 1000);
     } catch (error: any) {
-      setError(error.message || "주문 중 오류가 발생했습니다.");
+      console.error(error.message || "주문 중 오류가 발생했습니다.");
     }
   };
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: '카트번호', width: 90 },
     {
-      field: 'imageUrl', // 'image'를 'imageUrl'로 수정
+      field: 'imageUrl',
       headerName: '이미지',
       width: 150,
       renderCell: (params) => (
@@ -120,7 +128,7 @@ const CartGrid = () => {
       headerName: '총 가격',
       type: 'number',
       width: 200,
-      valueGetter: (value,row) => row.price * row.quantity, // valueGetter 수정
+      valueGetter: (value,row) => row.price * row.quantity,
     },
     {
       field: 'modify',
@@ -141,7 +149,6 @@ const CartGrid = () => {
   ];
 
   return (
-
     <Box sx={{ height: 800, width: '100%' }}>
       <DataGrid
         rows={rows}
@@ -157,17 +164,19 @@ const CartGrid = () => {
         pageSizeOptions={[5]}
         checkboxSelection
         disableRowSelectionOnClick
+        onRowSelectionModelChange={(newSelection) => {
+          setSelectedRows([...newSelection]); // 새로운 배열로 복사하여 상태 업데이트
+        }}
       />
       <Button 
-          variant="contained" 
-          color="success" 
-          fullWidth 
-          onClick={handleCartToOrder
-          }
-          sx={{ mt: 2 }} // 버튼 상단 여백 추가
-        >
-          주문하기
-        </Button>
+        variant="contained" 
+        color="success" 
+        fullWidth 
+        onClick={handleCartToOrder}
+        sx={{ mt: 2 }}
+      >
+        주문하기
+      </Button>
     </Box>
   );
 };
