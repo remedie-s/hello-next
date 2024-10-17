@@ -64,6 +64,10 @@ const ProductDetail = () => {
       setError(error.message || "장바구니 추가 중 오류가 발생했습니다.");
     }
   };
+  const handleMain = () => {
+        router.push("/Main"); // 또는 원하는 메인 페이지의 경로로 수정
+    
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -109,6 +113,15 @@ const ProductDetail = () => {
           sx={{ mt: 2 }} // 버튼 상단 여백 추가
         >
           장바구니에 추가
+        </Button>
+        <Button 
+          variant="contained" 
+          color="success" 
+          fullWidth 
+          onClick={handleMain}
+          sx={{ mt: 2 }} // 버튼 상단 여백 추가
+        >
+          메인메뉴로 돌아가기
         </Button>
       </Container>
     </div>

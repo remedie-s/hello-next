@@ -244,7 +244,10 @@ export default function DashboardLayoutBasic(props: DemoProps) {
     return {
       pathname,
       searchParams: new URLSearchParams(),
-      navigate: (path) => setPathname(String(path)),
+      navigate: (path) => {
+        console.log("Navigating to:", path); // 디버깅용 로그
+        setPathname(String(path));
+      },
     };
   }, [pathname]);
 
@@ -256,3 +259,4 @@ export default function DashboardLayoutBasic(props: DemoProps) {
     </AppProvider>
   );
 }
+

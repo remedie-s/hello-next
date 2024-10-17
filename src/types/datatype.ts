@@ -30,6 +30,12 @@ export type prouctToCartData = {
     productId:number;
     userId:number;
 }
+
+export type cartToOrderData = {
+    quantity:number;
+    productId:number;
+    userId:number;
+}
 export type product= {
     id: number;
     productName: string;

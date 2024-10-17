@@ -1,5 +1,5 @@
 import axios from "axios";
-import {loginData,signupData,prouctToCartData, addressRegData, productRegData, cart,  cartModifyData} from '../types/datatype'
+import {loginData,signupData,prouctToCartData, addressRegData, productRegData, cart,  cartModifyData, cartToOrderData} from '../types/datatype'
 
 const API_URL =  'http://localhost:8080'; // spring boot 유저 처리 페이지
 const api = axios.create({
@@ -139,6 +139,18 @@ export const cartDelete = async (cartData:cartModifyData)=>{
         throw error.response.data; // 실패시
     }
 }
+export const OrderToCart = async (cartData:cartToOrderData)=>{
+    try{
+        const response = await api.post(`${API_URL}/api/cart/cartToOrder`,cartData, {
+            headers :{
+                'Content-Type' :'application/json',
+            },
+        });
+        return response.data; // 성공시
+    } catch(error:any){
+        throw error.response.data; // 실패시
+    }
+} // product 데이터에 담아서 보내야함
 
 
 export const orderList = async ()=>{

@@ -1,12 +1,20 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { cartDelete, cartList, cartModify } from '../../utils/api'; 
+import { cartDelete, cartList, cartModify, OrderToCart } from '../../utils/api'; 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { Button } from '@mui/material';
+import { product } from '@/types/datatype';
+import { useRouter } from 'next/router';
 
 
 const CartGrid = () => {
+  const router = useRouter();
   const [rows, setRows] = React.useState([]);
-
+  const [product, setProduct] = React.useState<product | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
+  const [quantity, setQuantity] = React.useState<number>(1);
   const fetchCartList = async () => {
     try {
       const response = await cartList();
@@ -50,6 +58,33 @@ const CartGrid = () => {
       console.error('카트 삭제 오류:', error);
     }
   };
+  const handleCartToOrder = async () => {
+    console.log('주문시작')
+    if (!product) return;
+    const userId = sessionStorage.getItem("userId");
+
+    if (!userId) {
+      setError("사용자 ID가 필요합니다.");
+      return;
+    }
+
+    const orderForm = {
+      productId: product.id,
+      userId: Number(userId),
+      quantity: quantity,
+    };
+
+    try {
+      await OrderToCart(orderForm);
+      setSuccessMessage("주문 되었습니다.");
+      setTimeout(() => {
+        router.push("/Main"); // 또는 원하는 메인 페이지의 경로로 수정
+    }, 1000); // 1000 밀리초 = 1초
+    } catch (error: any) {
+      setError(error.message || "주문 중 오류가 발생했습니다.");
+    }
+  };
+
   const columns: GridColDef[] = [
     { field: 'id', headerName: '카트번호', width: 90 },
     {
@@ -106,6 +141,7 @@ const CartGrid = () => {
   ];
 
   return (
+
     <Box sx={{ height: 800, width: '100%' }}>
       <DataGrid
         rows={rows}
@@ -122,6 +158,16 @@ const CartGrid = () => {
         checkboxSelection
         disableRowSelectionOnClick
       />
+      <Button 
+          variant="contained" 
+          color="success" 
+          fullWidth 
+          onClick={handleCartToOrder
+          }
+          sx={{ mt: 2 }} // 버튼 상단 여백 추가
+        >
+          주문하기
+        </Button>
     </Box>
   );
 };
