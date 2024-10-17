@@ -1,5 +1,5 @@
 import axios from "axios";
-import {loginData,signupData,prouctToCartData, addressRegData, productRegData} from '../types/datatype'
+import {loginData,signupData,prouctToCartData, addressRegData, productRegData, cart,  cartModifyData} from '../types/datatype'
 
 const API_URL =  'http://localhost:8080'; // spring boot 유저 처리 페이지
 const api = axios.create({
@@ -102,8 +102,8 @@ export const productToCart = async (productData:prouctToCartData)=>{
     }
 } // product 데이터에 담아서 보내야함
 
-export const cartList = async (userid:number)=>{
-    try{const response = await api.get(`${API_URL}/api/cart/list/`,{
+export const cartList = async ()=>{
+    try{const response = await api.get(`${API_URL}/api/cart/list`,{
         headers :{
             'Content-Type' :'application/json',
         },
@@ -113,7 +113,35 @@ export const cartList = async (userid:number)=>{
         throw error.response.data; // 실패시
     }    
 }
-export const orderList = async (userid:number)=>{
+
+
+export const cartModify = async (cartData:cartModifyData)=>{
+    try{
+        const response = await api.post(`${API_URL}/api/cart/modify/${cartData.id}`,cartData, {
+            headers :{
+                'Content-Type' :'application/json',
+            },
+        });
+        return response.data; // 성공시
+    } catch(error:any){
+        throw error.response.data; // 실패시
+    }
+}
+export const cartDelete = async (cartData:cartModifyData)=>{
+    try{
+        const response = await api.post(`${API_URL}/api/cart/delete/${cartData.id}`,cartData, {
+            headers :{
+                'Content-Type' :'application/json',
+            },
+        });
+        return response.data; // 성공시
+    } catch(error:any){
+        throw error.response.data; // 실패시
+    }
+}
+
+
+export const orderList = async ()=>{
     try{const response = await api.get(`${API_URL}/api/order/list/`,{
         headers :{
             'Content-Type' :'application/json',

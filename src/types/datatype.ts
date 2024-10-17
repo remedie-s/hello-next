@@ -32,10 +32,23 @@ export type prouctToCartData = {
 }
 export type product= {
     id: number;
-  productName: string;
-  description: string;
-  price: number;
-  quantity: number;
-  imageUrl: string;
+    productName: string;
+    description: string;
+    price: number;
+    quantity: number;
+    imageUrl: string;
 
+}
+
+export type cart= {
+    id :number;
+    imageUrl:string;
+    productName:string;
+    price:number;
+    quantity:number;
+}
+
+export type cartModifyData={
+    id:number;
+    quantity:number;
 }

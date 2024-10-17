@@ -1,60 +1,120 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
+import { cartDelete, cartList, cartModify } from '../../utils/api'; 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-const columns: GridColDef<(typeof rows)[number]>[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  {
-    field: 'firstName',
-    headerName: 'First name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'lastName',
-    headerName: 'Last name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 160,
-    valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
-  },
-];
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
+const CartGrid = () => {
+  const [rows, setRows] = React.useState([]);
 
-export default function CartGrid() {
+  const fetchCartList = async () => {
+    try {
+      const response = await cartList();
+      console.log('Fetched cart list:', response);
+      setRows(response);
+    } catch (error) {
+      console.error('Error fetching cart list:', error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchCartList();
+  }, []);
+
+  const handleModify = async (row:any) => {
+    const updatedCartData = {
+      id: row.id,
+      quantity: row.quantity, // 수정할 수량
+    };
+
+    try {
+      const response = await cartModify(updatedCartData);
+      console.log('Modify response:', response);
+      setRows(response);
+    } catch (error) {
+      console.error('Error modifying cart:', error);
+    }
+  };
+
+  const handleRemove = async (row:any) => {
+    const cartData = {
+      id: row.id,
+      quantity: row.quantity, //  그냥 같이 보냄
+    };
+
+    try {
+      const response = await cartDelete(cartData);
+      console.log('Delete response:', response);
+      setRows(response);
+    } catch (error) {
+      console.error('Error deleting cart:', error);
+    }
+  };
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: '카트번호', width: 90 },
+    {
+      field: 'imageUrl', // 'image'를 'imageUrl'로 수정
+      headerName: '이미지',
+      width: 150,
+      renderCell: (params) => (
+        <img src={params.row.imageUrl} alt={params.row.productName} style={{ width: '100%', height: 'auto' }} />
+      ),
+    },
+    {
+      field: 'productName',
+      headerName: '상품 이름',
+      width: 150,
+      editable: false,
+    },
+    {
+      field: 'price',
+      headerName: '가격',
+      type: 'number',
+      width: 200,
+      editable: false,
+    },
+    {
+      field: 'quantity',
+      headerName: '수량',
+      type: 'number',
+      width: 150,
+      editable: true,
+    },
+    {
+      field: 'subTotal',
+      headerName: '총 가격',
+      type: 'number',
+      width: 200,
+      valueGetter: (value,row) => row.price * row.quantity, // valueGetter 수정
+    },
+    {
+      field: 'modify',
+      headerName: '수정',
+      width: 100,
+      renderCell: (params) => (
+        <button onClick={() => handleModify(params.row)}>수정</button>
+      ),
+    },
+    {
+      field: 'remove',
+      headerName: '삭제',
+      width: 100,
+      renderCell: (params) => (
+        <button onClick={() => handleRemove(params.row.id)}>삭제</button>
+      ),
+    },
+  ];
+
   return (
-    <Box sx={{ height: 400, width: '100%' }}>
+    <Box sx={{ height: 800, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}
+        rowHeight={100}
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 5,
+              pageSize: 8,
             },
           },
         }}
@@ -64,4 +124,6 @@ export default function CartGrid() {
       />
     </Box>
   );
-}
+};
+
+export default CartGrid;
