@@ -11,7 +11,7 @@ export default function Home() {
       if (typeof window !== 'undefined') {
         router.push("/Main"); // 상대 경로 사용
       }
-    }, 1000 * 3);
+    }, 1000 * 0.1);
 
     return () => clearInterval(interval); // 클리어 함수
   }, [router])

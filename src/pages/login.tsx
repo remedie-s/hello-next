@@ -97,10 +97,10 @@ const LoginPage: React.FC = () => {
     try {
       const result = await login(logindata);
       setSuccess(result);
-      // 로그인 성공 시 처리 //TODO 세션스토리지에 저장해야함
+      // 로그인 성공 시 처리
       // ID와 username을 가져오기
       const { id, username,accessToken,refreshToken } = result;
-      setSuccess(`환영합니다, ${username}님! 당신의 ID는 ${id}입니다.`);
+      setSuccess(`환영합니다, ${username}님! 당신의 ID는 ${id}입니다. 2초후 메인페이지로 리다리렉트 됩니다.`);
       console.log("User ID:", id);
       console.log("Username:", username);
       // 세션 스토리지에 저장
@@ -110,12 +110,18 @@ const LoginPage: React.FC = () => {
       sessionStorage.setItem("refreshToken", refreshToken);
 
       // 로그인 성공 시 리다이렉트
-      // router.push('/');
+      setTimeout(() => {
+        console.log("메인페이지로 리다이렉트 됩니다.")
+        router.push("/");
+      }, 1*2000);
     } catch (error: any) {
       const errorMessage =
         error.response?.data || error.message || "Unknown error occurred";
       setError(errorMessage);
+    }finally{
+      
     }
+      
   };
 
   // const validateInputs = () => {

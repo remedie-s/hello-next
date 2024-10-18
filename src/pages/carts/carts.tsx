@@ -3,21 +3,16 @@ import Box from '@mui/material/Box';
 import { cartDelete, cartList, cartModify, OrderToCart } from '../../utils/api'; 
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
-import { product } from '@/types/datatype';
+import { CartItem, product } from '@/types/datatype';
 import { useRouter } from 'next/router';
 
-interface CartItem {
-  id: number;
-  imageUrl: string;
-  productName: string;
-  price: number;
-  quantity: number;
-}
+
 
 const CartGrid: React.FC = () => {
   const router = useRouter();
   const [rows, setRows] = React.useState<CartItem[]>([]);
   const [selectedRows, setSelectedRows] = React.useState<GridRowId[]>([]); // 선택된 행의 ID를 저장할 상태
+  
 
   const fetchCartList = async () => {
     try {
@@ -76,7 +71,7 @@ const CartGrid: React.FC = () => {
     const orderForms = selectedRows.map(id => {
       const row = rows.find(item => item.id === id);
       return {
-        productId: row?.id,
+        productId: row?.productId,
         userId: Number(userId),
         quantity: row?.quantity,
       };
@@ -85,9 +80,7 @@ const CartGrid: React.FC = () => {
     try {
       await Promise.all(orderForms.map(orderForm => OrderToCart(orderForm))); // 모든 주문 요청 보내기
       console.log("주문 되었습니다.");
-      setTimeout(() => {
-        router.push("/Main");
-      }, 1000);
+      fetchCartList(); 
     } catch (error: any) {
       console.error(error.message || "주문 중 오류가 발생했습니다.");
     }
@@ -95,6 +88,12 @@ const CartGrid: React.FC = () => {
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: '카트번호', width: 90 },
+    {
+      field: 'productId',
+      headerName: '상품 번호',
+      width: 100,
+      editable: false,
+    },
     {
       field: 'imageUrl',
       headerName: '이미지',
@@ -157,7 +156,7 @@ const CartGrid: React.FC = () => {
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 8,
+              pageSize: 6,
             },
           },
         }}

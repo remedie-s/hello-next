@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { order } from '@/types/datatype';
 import { orderDelete, orderList, orderModify } from '@/utils/api';
 
-const OrderGrid: React.FC = () => {
+const OrderAdminGrid: React.FC = () => {
   const router = useRouter();
   const [rows, setRows] = React.useState<order[]>([]);
   const [selectedRows, setSelectedRows] = React.useState<GridRowId[]>([]); // 선택된 행의 ID를 저장할 상태
@@ -101,29 +101,16 @@ const columns: GridColDef[] = [
   {
     field: 'status',
     headerName: '상태',
+    type: 'number',
     width: 200,
-    valueGetter: (value,row) => {
-      switch (row.status) {
-        case 0: return '주문접수';
-        case 1: return '주문승인';
-        case 2: return '배송시작';
-        case 3: return '배송완료';
-        case 100: return '주문닫힘';
-        default: return '알 수 없음';
-      }
-    },
+    editable: true,
   },
   {
     field: 'request',
     headerName: '주문승인',
+    type: 'number',
     width: 200,
-    valueGetter: (value,row) => {
-      switch (row.status) {
-        case 0: return '주문 미승인';
-        case 100: return '주문 승인';
-        default: return '알 수 없음';
-      }
-    },
+    editable: true,
   },
   {
     field: 'modify',
@@ -176,4 +163,4 @@ const columns: GridColDef[] = [
   );
 }
 
-export default OrderGrid;
+export default OrderAdminGrid;

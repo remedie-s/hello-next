@@ -32,9 +32,9 @@ export type prouctToCartData = {
 }
 
 export type cartToOrderData = {
-    quantity:number;
-    productId:number;
-    userId:number;
+    quantity:number|undefined;
+    productId:number|undefined;
+    userId:number|undefined;
 }
 export type product= {
     id: number;
@@ -45,6 +45,15 @@ export type product= {
     imageUrl: string;
 
 }
+
+export type CartItem= {
+    id: number;
+    productId:number;
+    imageUrl: string;
+    productName: string;
+    price: number;
+    quantity: number;
+  }
 
 export type cart= {
     id :number;
@@ -57,4 +66,28 @@ export type cart= {
 export type cartModifyData={
     id:number;
     quantity:number;
+}
+
+export type order={
+    id:number;
+	userId:number;
+	productId:number;
+	productUrl:string;
+	productPrice:number;
+    quantity:number;
+    status:number;
+    request:number;
+    createDate:Date;
+}
+
+export type orderModifyData={
+    id:number;
+    userId:number;
+    status:number;
+    request:number;
+}
+
+export type orderDeleteData={
+    id:number;
+    userId:number;
 }

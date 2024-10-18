@@ -51,6 +51,8 @@ import CartGrid from "@/pages/carts/carts";
 import OrderGrid from "@/pages/orders/orders";
 import AddressCreatePage from "@/pages/address/addressCreate";
 import ProductDetailPage from "@/pages/ProdcutDetailPage";
+import Main from "@/pages/Main";
+import OrderAdminGrid from "@/pages/orders/ordersAdmin";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
@@ -138,6 +140,11 @@ const NAVIGATION: Navigation = [
     icon: <ShoppingBagIcon />,
   },
   {
+    segment: "ordersAdmin",
+    title: "주문관리",
+    icon: <ShoppingBagIcon />,
+  },
+  {
     segment: "addressCreate",
     title: "주소 설정",
     icon: <HomeIcon />,
@@ -216,6 +223,9 @@ function DemoPageContent({ pathname }: IPage) {
       {/* 상품 상세 페이지 */}
       {pathname.startsWith("/product/detail/") && <ProductDetailPage/>}
 
+      {/* 메인 페이지 */}
+      {pathname === "/Main" && <Main />}
+      
       {/* 로그인 페이지 */}
       {pathname === "/login" && <LoginPage />}
 
@@ -233,6 +243,8 @@ function DemoPageContent({ pathname }: IPage) {
       
       {/* 오더 페이지 */}
       {pathname === "/orders" && <OrderGrid />}
+      {/* 오더 관리 페이지 */}
+      {pathname === "/ordersAdmin" && <OrderAdminGrid />}
 
     </Box>
   );

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {loginData,signupData,prouctToCartData, addressRegData, productRegData, cart,  cartModifyData, cartToOrderData} from '../types/datatype'
+import {loginData,signupData,prouctToCartData, addressRegData, productRegData, cart,  cartModifyData, cartToOrderData, orderModifyData, orderDeleteData} from '../types/datatype'
 
 const API_URL =  'http://localhost:8080'; // spring boot 유저 처리 페이지
 const api = axios.create({
@@ -154,7 +154,7 @@ export const OrderToCart = async (cartData:cartToOrderData)=>{
 
 
 export const orderList = async ()=>{
-    try{const response = await api.get(`${API_URL}/api/order/list/`,{
+    try{const response = await api.get(`${API_URL}/api/order/list`,{
         headers :{
             'Content-Type' :'application/json',
         },
@@ -165,7 +165,7 @@ export const orderList = async ()=>{
     }    
 }
 export const orderListBySeller = async ()=>{//인증정보는 스프링 시큐리티에서구분
-    try{const response = await api.get(`${API_URL}/api/order/admin`,{
+    try{const response = await api.get(`${API_URL}/api/order/list/admin`,{
         headers :{
             'Content-Type' :'application/json',
         },
@@ -176,3 +176,28 @@ export const orderListBySeller = async ()=>{//인증정보는 스프링 시큐�
     }    
 }
 
+export const orderModify = async (orderData:orderModifyData)=>{
+    try{
+        const response = await api.post(`${API_URL}/api/order/modify/${orderData.id}`,orderData, {
+            headers :{
+                'Content-Type' :'application/json',
+            },
+        });
+        return response.data; // 성공시
+    } catch(error:any){
+        throw error.response.data; // 실패시
+    }
+}
+
+export const orderDelete = async (orderData:orderDeleteData)=>{
+    try{
+        const response = await api.post(`${API_URL}/api/order/delete/${orderData.id}`,orderData, {
+            headers :{
+                'Content-Type' :'application/json',
+            },
+        });
+        return response.data; // 성공시
+    } catch(error:any){
+        throw error.response.data; // 실패시
+    }
+}
