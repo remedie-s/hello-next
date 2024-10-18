@@ -27,20 +27,30 @@ const OrderGrid: React.FC = () => {
   }, []);
 
   const handleModify = async (row: order) => {
+    // 반품 리퀘스트가 2 이상이면 요청을 종료
+    if (row.request >= 2) {
+      console.error('반품 신청이 최종 단계입니다. 요청을 종료합니다.');
+      return; // 함수 실행 종료
+  }
+   // 반품 리퀘스트가 2 미만일 때만 +1(다음 단계)
+   const updateRequest = row.request + 1;
+   console.log('반품 신청이 들어왔습니다.');
+
     const updatedOrderData = {
       
       id: row.id,
       userId: Number(sessionStorage.getItem("userId")),
       status: row.status,
-      request:row.request,
-    };
+      request: updateRequest,
+      }
+    
 
     try {
       const response: order[] = await orderModify(updatedOrderData);
-      console.log('Modify response:', response);
+      console.log('반품 response:', response);
       setRows(response);
     } catch (error) {
-      console.error('Error modifying cart:', error);
+      console.error('반품 신청 오류:', error);
     }
   };
 
@@ -81,7 +91,7 @@ const columns: GridColDef[] = [
     field: 'productPrice',
     headerName: '가격',
     type: 'number',
-    width: 200,
+    width: 150,
     editable: false,
   },
   {
@@ -95,32 +105,33 @@ const columns: GridColDef[] = [
     field: 'subTotal',
     headerName: '총 가격',
     type: 'number',
-    width: 200,
+    width: 150,
     valueGetter: (value,row) => row.productPrice * row.quantity,
   },
   {
     field: 'status',
     headerName: '상태',
-    width: 200,
+    width: 120,
     valueGetter: (value,row) => {
       switch (row.status) {
         case 0: return '주문접수';
         case 1: return '주문승인';
         case 2: return '배송시작';
         case 3: return '배송완료';
-        case 100: return '주문닫힘';
+        case 4: return '주문닫힘';
         default: return '알 수 없음';
       }
     },
   },
   {
     field: 'request',
-    headerName: '주문승인',
-    width: 200,
+    headerName: '반품신청',
+    width: 120,
     valueGetter: (value,row) => {
-      switch (row.status) {
-        case 0: return '주문 미승인';
-        case 100: return '주문 승인';
+      switch (row.request) {
+        case 0: return '요청 없음';
+        case 1: return '반품 신청';
+        case 2: return '반품 완료';
         default: return '알 수 없음';
       }
     },
@@ -128,17 +139,17 @@ const columns: GridColDef[] = [
   {
     field: 'modify',
     headerName: '수정',
-    width: 100,
+    width: 130,
     renderCell: (params) => (
-      <button onClick={() => handleModify(params.row)}>수정</button>
+      <Button variant="outlined" color="secondary" onClick={() => handleModify(params.row)}>반품신청</Button>
     ),
   },
   {
     field: 'remove',
     headerName: '삭제',
-    width: 100,
+    width: 120,
     renderCell: (params) => (
-      <button onClick={() => handleRemove(params.row)}>삭제</button>
+      <Button variant="outlined" color="error" onClick={() => handleRemove(params.row)}>삭제</Button>
     ),
   },
 ];

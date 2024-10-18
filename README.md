@@ -177,17 +177,21 @@
 - **Next.js**: UI 관련 데이터 처리, 간단한 데이터 포맷팅, 필터링 등.
 
 각 상황에 맞게 적절한 위치에서 데이터를 가공하면 더 효율적이고 유지보수하기 쉬운 코드를 작성할 수 있습니다.
+switch (row.status) {
+        case 0: return '주문접수';
+        case 1: return '주문승인';
+        case 2: return '배송시작';
+        case 3: return '배송완료';
+        case 4: return '주문닫힘';
+        default: return '알 수 없음';
+      }
 
-주문 상태별 switch:
-case 0 : 주문접수
-case 1 : 주문승인
-case 2 : 배송시작
-case 3 : 배송완료
-case 100 : 주문닫힘
-        
-
-
-
+switch (row.request) {
+        case 0: return '요청 없음';
+        case 1: return '반품 신청';
+        case 2: return '반품 완료';
+        default: return '알 수 없음';
+      }
 
 
 

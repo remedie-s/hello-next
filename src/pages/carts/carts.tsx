@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { cartDelete, cartList, cartModify, OrderToCart } from '../../utils/api'; 
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { CartItem, product } from '@/types/datatype';
 import { useRouter } from 'next/router';
 
@@ -12,6 +12,8 @@ const CartGrid: React.FC = () => {
   const router = useRouter();
   const [rows, setRows] = React.useState<CartItem[]>([]);
   const [selectedRows, setSelectedRows] = React.useState<GridRowId[]>([]); // 선택된 행의 ID를 저장할 상태
+  const [totalPrice, setTotalPrice] = React.useState<number>(0); // 총 가격 상태 추가
+
   
 
   const fetchCartList = async () => {
@@ -134,7 +136,7 @@ const CartGrid: React.FC = () => {
       headerName: '수정',
       width: 100,
       renderCell: (params) => (
-        <button onClick={() => handleModify(params.row)}>수정</button>
+        <Button onClick={() => handleModify(params.row)}>수정</Button>
       ),
     },
     {
@@ -142,11 +144,19 @@ const CartGrid: React.FC = () => {
       headerName: '삭제',
       width: 100,
       renderCell: (params) => (
-        <button onClick={() => handleRemove(params.row)}>삭제</button>
+        <Button onClick={() => handleRemove(params.row)}>삭제</Button>
       ),
     },
   ];
-
+    // 선택된 행의 총 가격 계산
+    React.useEffect(() => {
+      const total: number = selectedRows.reduce((sum: number, id: GridRowId) => {
+        const row = rows.find(item => item.id === id);
+        return sum + (row ? row.price * row.quantity : 0);
+      }, 0);
+      setTotalPrice(total);
+    }, [selectedRows, rows]);
+  
   return (
     <Box sx={{ height: 800, width: '100%' }}>
       <DataGrid
@@ -167,6 +177,9 @@ const CartGrid: React.FC = () => {
           setSelectedRows([...newSelection]); // 새로운 배열로 복사하여 상태 업데이트
         }}
       />
+      <Typography variant="h6" align="center" sx={{ mt: 2 }}>
+        총 가격: {totalPrice.toLocaleString()} 원
+      </Typography>
       <Button 
         variant="contained" 
         color="success" 
