@@ -30,6 +30,18 @@ export type prouctToCartData = {
     productId:number;
     userId:number;
 }
+export type productReveiwRegData = {
+    productId:number;
+    userId:number;
+    content:string;
+    rating:number|null;
+}
+export type productReview ={
+    id:number;
+    content:string;
+    rating:number;
+    createDate:Date;
+}
 
 export type cartToOrderData = {
     quantity:number|undefined;
@@ -37,6 +49,7 @@ export type cartToOrderData = {
     userId:number|undefined;
 }
 export type product= {
+    sellCount: number;
     id: number;
     productName: string;
     description: string;

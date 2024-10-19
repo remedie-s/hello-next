@@ -34,7 +34,7 @@ const OrderAdminGrid: React.FC = () => {
   }
    // 주문 상태가 4 미만일 때만 +1(다음 단계)
    const updateState = row.status + 1;
-   console.log('반품 신청이 들어왔습니다.');
+   console.log('주문이 다음 절차가 되었습니다.');
 
 
 
