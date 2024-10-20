@@ -52,6 +52,7 @@ import ProductDetailPage from "@/pages/ProdcutDetailPage";
 import Main from "@/pages/Main";
 import OrderAdminGrid from "@/pages/orders/ordersAdmin";
 import LogoutPage from "@/pages/logout";
+import ProductDetail from "@/pages/product/detail/[id]";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
@@ -198,7 +199,8 @@ const demoTheme = createTheme({
 //function DemoPageContent(props : { pathname: string }){
 //function DemoPageContent(props : 타입){
 function DemoPageContent({ pathname }: IPage) {
-  const isProductPage = pathname.startsWith("/product/");
+  const isProductPage = pathname.startsWith("/product/")||!pathname.startsWith("/product/detail");
+  const isProductDetailPage= pathname.startsWith("/product/detail");
   const category = isProductPage ? pathname.split("/")[2] : null; // '/product/' 다음의 부분이 카테고리
 
   return (
@@ -220,8 +222,8 @@ function DemoPageContent({ pathname }: IPage) {
       )}
 
       {/* 상품 상세 페이지 */}
-      {pathname.startsWith("/product/detail/") && <ProductDetailPage/>}
-
+      {/* {pathname == ("/product/detail/:segment") && <ProductDetail/>} */}
+      {isProductDetailPage&&<ProductDetail/>}
       {/* 메인 페이지 */}
       {pathname === "/Main" && <Main />}
       
@@ -253,6 +255,7 @@ function DemoPageContent({ pathname }: IPage) {
 }
 
 export default function DashboardLayoutBasic(props: DemoProps) {
+  const { children } = props;
   const [pathname, setPathname] = React.useState("/dashboard");
   const router = React.useMemo<Router>(() => {
     return {
@@ -268,7 +271,10 @@ export default function DashboardLayoutBasic(props: DemoProps) {
   return (
     <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
       <DashboardLayout>
-        <DemoPageContent pathname={pathname} />
+        <DemoPageContent pathname={pathname} >
+         {/* children을 렌더링 */}
+         {children}
+         </DemoPageContent>
       </DashboardLayout>
     </AppProvider>
   );

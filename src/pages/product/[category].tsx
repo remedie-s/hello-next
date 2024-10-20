@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Grid2, Paper } from '@mui/material';
 import { productList } from '../../utils/api'; 
-import { productCate } from '@/types/productCate';
+import { productCate } from '@/types/datatype';
 import { useRouter } from 'next/router'; 
 import Link from 'next/link'; 
 

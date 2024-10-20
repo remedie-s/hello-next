@@ -198,5 +198,59 @@ switch (row.request) {
 
 마우스 오버시 창이 하나 켜지면서 상품 갯수 상품 총 금액 주문 버튼
 
+ 그냥 메소드에서 처리함
+넥스트 크로스 오리진 설정
+Next.js에서 CORS를 설정하려면 보통 API 라우트에서 직접 처리해야 합니다. Next.js는 기본적으로 서버가 아닌 클라이언트 사이드에서 작동하므로, CORS 처리는 API 요청을 처리하는 서버 측에서 이루어져야 합니다.
+
+API 라우트에서 CORS를 설정하는 방법은 다음과 같습니다:
+
+API 라우트 생성: Next.js의 pages/api 디렉토리에 API 라우트를 생성합니다. 예를 들어, pages/api/example.js 파일을 생성합니다.
+
+CORS 미들웨어 추가: 아래 예시와 같이 CORS 설정을 추가합니다. 여기서는 cors 패키지를 사용하여 CORS를 설정합니다. cors 패키지를 설치하려면 다음 명령어를 사용하세요.
+
+bash
+코드 복사
+npm install cors
+API 라우트 코드 작성: pages/api/example.js 파일에 CORS 미들웨어를 추가하는 코드를 작성합니다.
+
+javascript
+코드 복사
+import Cors from 'cors';
+
+// CORS 미들웨어 초기화
+const cors = Cors({
+    methods: ['POST', 'GET', 'HEAD'], // 허용할 HTTP 메서드
+    origin: 'http://localhost:8080', // 허용할 출처
+    credentials: true, // 자격 증명 허용
+});
+
+// API 라우트를 위한 헬퍼 함수
+function runMiddleware(req, res, fn) {
+    return new Promise((resolve, reject) => {
+        fn(req, res, (result) => {
+            if (result instanceof Error) {
+                return reject(result);
+            }
+            return resolve(result);
+        });
+    });
+}
+
+// API 핸들러
+export default async function handler(req, res) {
+    await runMiddleware(req, res, cors);
+    
+    // API 로직 구현
+    res.json({ message: 'CORS가 설정되었습니다!' });
+}
+이 코드는 API 요청에 대해 CORS 정책을 적용합니다. 위의 코드에서 origin 속성에 Next.js 클라이언트의 URL을 설정하여 CORS 허용 출처를 지정합니다. 이 설정이 이루어진 후에는 Next.js 애플리케이션에서 해당 API를 호출할 때 CORS 오류가 발생하지 않아야 합니다.
+
+주의사항
+CORS는 보안 관련 설정이므로, 실제 운영 환경에서는 origin을 보다 구체적으로 설정하는 것이 좋습니다.
+모든 API 라우트에 대해 CORS를 설정하고 싶다면, 공통 미들웨어로 처리하는 방법도 고려할 수 있습니다.
+
+
+
+
 
 

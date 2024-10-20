@@ -276,5 +276,9 @@ const ProductDetail = () => {
     </div>
   );
 };
+// 레이아웃 적용을 위한 getLayout 함수
+ProductDetail.getLayout = (page: React.ReactElement) => {
+  return <DashboardLayoutBasic pathname="product/detail/:segment">{page}</DashboardLayoutBasic>;
+};
 
 export default ProductDetail;
