@@ -17,6 +17,32 @@ export type addressRegData = {
     detailAddress: string,
     streetName: string,
 }
+
+export type Product = {
+    id: number;
+    productName: string;
+    imageUrl: string;
+    price: number;
+  }
+export type productCate ={
+    id: number;
+    productName: string;
+    price: number;
+    imageUrl: string;
+}
+
+export type  ProductDetail={
+    id:number,
+    productName:string,
+    description:string,
+    price:number,
+    quantity:number,
+    imageUrl:string,
+    createDate:Date,
+    category:string,
+    sellCount:number
+}
+
 export type productRegData = {
     productName:string;
     description:string;

@@ -41,18 +41,17 @@ import { useNavigate } from "react-router-dom";
 
 // 타입가져오기
 import type { DemoProps, IPage } from "../types";
-import ResponsiveGrid from "./ResponsiveGrid";
 import LoginPage from "@/pages/login";
 import SignupPage from "@/pages/signup";
 import ProductCreatePage from "@/pages/productCreate";
 import All from "@/pages/product/[category]";
-import DetailPage  from "../pages/product/detail/[id]"
 import CartGrid from "@/pages/carts/carts";
 import OrderGrid from "@/pages/orders/orders";
 import AddressCreatePage from "@/pages/address/addressCreate";
 import ProductDetailPage from "@/pages/ProdcutDetailPage";
 import Main from "@/pages/Main";
 import OrderAdminGrid from "@/pages/orders/ordersAdmin";
+import LogoutPage from "@/pages/logout";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
@@ -228,6 +227,9 @@ function DemoPageContent({ pathname }: IPage) {
       
       {/* 로그인 페이지 */}
       {pathname === "/login" && <LoginPage />}
+
+      {/* 로그아웃 페이지 */}
+      {pathname === "/logout" && <LogoutPage />}
 
       {/* 회원가입 페이지 */}
       {pathname === "/signup" && <SignupPage />}

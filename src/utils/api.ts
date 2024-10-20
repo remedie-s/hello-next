@@ -42,6 +42,20 @@ export const login = async (loginUserData:loginData)=>{
         throw error.response.data; // 실패시
     }
 }
+
+export const logout = async ()=>{
+    try{
+        const response = await api.get(`${API_URL}/spmallUser/logout`, {
+            headers :{
+                'Content-Type' :'application/json',
+            },
+        });
+        return response.data; // 성공시
+    } catch(error:any){
+        throw error.response.data; // 실패시
+    }
+}
+
 export const addressReg = async (addressData:addressRegData)=>{
     try{
         const response = await api.post(`${API_URL}/api/address/create`,addressData, {
