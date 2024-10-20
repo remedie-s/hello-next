@@ -3,7 +3,7 @@ import { experimentalStyled as styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
-import { Product } from '@/types/product';
+import { Product } from '@/types/datatype';
 
 // const items = [
 //   { id: 0, name: '마녀' ,url: 'https://cdn.pixabay.com/photo/2024/03/27/11/18/witch-8658915_1280.png', cost: 1000 },

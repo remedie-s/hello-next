@@ -18,7 +18,7 @@ import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import ForgotPassword from "./ForgotPassword";
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from "./CustomIcons";
+// import { GoogleIcon, FacebookIcon, SitemarkIcon } from "./CustomIcons";
 import { setSession } from "../utils";
 // import AppTheme from '../shared-theme/AppTheme';
 // import ColorModeSelect from '../shared-theme/ColorModeSelect';
@@ -99,7 +99,7 @@ const LoginPage: React.FC = () => {
       setSuccess(result);
       // 로그인 성공 시 처리
       // ID와 username을 가져오기
-      const { id, username,accessToken,refreshToken } = result;
+      const { id, username,accessToken,refreshToken,email } = result;
       setSuccess(`환영합니다, ${username}님! 당신의 ID는 ${id}입니다. 2초후 메인페이지로 리다리렉트 됩니다.`);
       console.log("User ID:", id);
       console.log("Username:", username);
@@ -108,6 +108,7 @@ const LoginPage: React.FC = () => {
       sessionStorage.setItem("username", username);
       sessionStorage.setItem("accessToken", accessToken);
       sessionStorage.setItem("refreshToken", refreshToken);
+      sessionStorage.setItem("email", email);
 
       // 로그인 성공 시 리다이렉트
       setTimeout(() => {
@@ -118,10 +119,7 @@ const LoginPage: React.FC = () => {
       const errorMessage =
         error.response?.data || error.message || "Unknown error occurred";
       setError(errorMessage);
-    }finally{
-      
     }
-      
   };
 
   // const validateInputs = () => {

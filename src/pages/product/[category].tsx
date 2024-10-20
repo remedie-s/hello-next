@@ -46,7 +46,7 @@ const All: React.FC<AllProps> = ({ category }) => {
            // @ts-ignore
           <Grid2  key={item.id}  xs={2} sm={4} md={6}> 
           {/* TODO Grid2에 오류 난걸 무시  */}
-            <Link href={`/product/detail/${item.id}`} passHref>
+            <Link href={`/detail/${item.id}`} passHref>
               <Item>
                 <img src={item.imageUrl} alt={item.productName} style={{ height: 100, width: 150 }} />
                 <div>{item.productName}</div>

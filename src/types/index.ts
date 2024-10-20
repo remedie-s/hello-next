@@ -53,11 +53,14 @@ export interface DemoProps {
 export interface IPage {
     // 개별 페이지 별 URL
     pathname :string
+    session?:any
     children?: ReactElement; // children 속성을 추가
   }
 
   // 세션용 타입 구성, 타입을 저장하겠다
   export type ISession={
     uid:string
+    name?:string
+    email?:string
   }
 

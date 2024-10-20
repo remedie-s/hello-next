@@ -48,11 +48,10 @@ import All from "@/pages/product/[category]";
 import CartGrid from "@/pages/carts/carts";
 import OrderGrid from "@/pages/orders/orders";
 import AddressCreatePage from "@/pages/address/addressCreate";
-import ProductDetailPage from "@/pages/ProdcutDetailPage";
 import Main from "@/pages/Main";
 import OrderAdminGrid from "@/pages/orders/ordersAdmin";
 import LogoutPage from "@/pages/logout";
-import ProductDetail from "@/pages/product/detail/[id]";
+import ProductDetail from "@/pages/detail/[id]";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
@@ -198,11 +197,11 @@ const demoTheme = createTheme({
 // 컴포넌트의 인자 -> props 인데 아래와 같은 표현은 => (중괄호)<- props 를 바로객체 구조분해
 //function DemoPageContent(props : { pathname: string }){
 //function DemoPageContent(props : 타입){
-function DemoPageContent({ pathname }: IPage) {
-  const isProductPage = pathname.startsWith("/product/")||!pathname.startsWith("/product/detail");
-  const isProductDetailPage= pathname.startsWith("/product/detail");
+function DemoPageContent({ pathname, session }: IPage) {
+  const isProductPage = pathname.startsWith("/product/");
+  const isProductDetailPage = pathname.startsWith("/detail");
   const category = isProductPage ? pathname.split("/")[2] : null; // '/product/' 다음의 부분이 카테고리
-
+  const productId = isProductDetailPage ? pathname.split("/")[2] : null; // '/product/' 다음의 부분이 카테고리
   return (
     <Box
       sx={{
@@ -214,19 +213,23 @@ function DemoPageContent({ pathname }: IPage) {
       }}
     >
       <Typography>Dashboard content for {pathname}</Typography>
-      
+      {session && ( // 세션이 있을 때 사용자 정보 표시
+        <Typography variant="h6">
+          안녕하세요, {session.name}님! 이메일: {session.email}
+        </Typography>
+      )}
 
       {/* 특정 카테고리를 위한 부분 category가 all 이면 스프링 컨트롤러에서 처리해서 모든 상품을 보내줌*/}
-      {isProductPage && category && (
-        <All category={category} />
-      )}
+      {isProductPage && category && <All category={category} />}
 
       {/* 상품 상세 페이지 */}
       {/* {pathname == ("/product/detail/:segment") && <ProductDetail/>} */}
-      {isProductDetailPage&&<ProductDetail/>}
+      {isProductDetailPage && productId && (
+        <ProductDetail productId={Number(productId)} />
+      )}
       {/* 메인 페이지 */}
       {pathname === "/Main" && <Main />}
-      
+
       {/* 로그인 페이지 */}
       {pathname === "/login" && <LoginPage />}
 
@@ -237,19 +240,18 @@ function DemoPageContent({ pathname }: IPage) {
       {pathname === "/signup" && <SignupPage />}
 
       {/* 회원가입 페이지 */}
-      {pathname === "/addressCreate" && <AddressCreatePage />}  
+      {pathname === "/addressCreate" && <AddressCreatePage />}
 
       {/* 상품 생성 페이지 */}
       {pathname === "/productCreate" && <ProductCreatePage />}
 
       {/* 카트 페이지 */}
       {pathname === "/carts" && <CartGrid />}
-      
+
       {/* 오더 페이지 */}
       {pathname === "/orders" && <OrderGrid />}
       {/* 오더 관리 페이지 */}
       {pathname === "/ordersAdmin" && <OrderAdminGrid />}
-
     </Box>
   );
 }
@@ -257,6 +259,13 @@ function DemoPageContent({ pathname }: IPage) {
 export default function DashboardLayoutBasic(props: DemoProps) {
   const { children } = props;
   const [pathname, setPathname] = React.useState("/dashboard");
+  const [session, setSession] = React.useState<{
+    name: string;
+    email: string;
+  } | null>(null); // 세션 상태 추가
+  const setUserSession = (user: { name: string; email: string }) => {
+    setSession(user);
+  };
   const router = React.useMemo<Router>(() => {
     return {
       pathname,
@@ -267,16 +276,27 @@ export default function DashboardLayoutBasic(props: DemoProps) {
       },
     };
   }, [pathname]);
-
+  React.useEffect(() => {
+    const userId = sessionStorage.getItem("userId");
+    const email = sessionStorage.getItem("email");
+    const username = sessionStorage.getItem("username");
+    // 세션이 존재하는 경우에만 설정
+    if (userId && email && username) {
+      const userSession = { name: username, email: email }; // 사용자 세션 객체 생성
+      setSession(userSession); // 세션 설정
+    } else {
+      // 세션이 없으면 로그인 페이지로 리다이렉트
+      router.navigate("/login");
+    }
+  }, [router]);
   return (
     <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
       <DashboardLayout>
-        <DemoPageContent pathname={pathname} >
-         {/* children을 렌더링 */}
-         {children}
-         </DemoPageContent>
+        <DemoPageContent pathname={pathname} session={session}>
+          {/* children을 렌더링 */}
+          {children}
+        </DemoPageContent>
       </DashboardLayout>
     </AppProvider>
   );
 }
-

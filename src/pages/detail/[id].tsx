@@ -6,7 +6,7 @@ import {
   productReviewList,
   productReviewReg,
   productToCart,
-} from "../../../utils/api";
+} from "../../utils/api";
 import { product, productReview } from "@/types/datatype";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -18,7 +18,11 @@ import DashboardLayoutBasic from "@/layout/Dashboard";
 import StarIcon from "@mui/icons-material/Star";
 import Rating from "@mui/material/Rating";
 
-const ProductDetail = () => {
+interface productId {
+  productId: number; // category prop 추가
+}
+
+const ProductDetail: React.FC<productId>  = ({productId}) => {
   const router = useRouter();
   const { id } = router.query;
   const [product, setProduct] = useState<product | null>(null);
@@ -277,8 +281,8 @@ const ProductDetail = () => {
   );
 };
 // 레이아웃 적용을 위한 getLayout 함수
-ProductDetail.getLayout = (page: React.ReactElement) => {
-  return <DashboardLayoutBasic pathname="product/detail/:segment">{page}</DashboardLayoutBasic>;
-};
+// ProductDetail.getLayout = (page: React.ReactElement) => {
+//   return <DashboardLayoutBasic pathname="product/detail/:segment">{page}</DashboardLayoutBasic>;
+// };
 
 export default ProductDetail;

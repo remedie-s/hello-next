@@ -13,7 +13,7 @@ const CartGrid: React.FC = () => {
   const [rows, setRows] = React.useState<CartItem[]>([]);
   const [selectedRows, setSelectedRows] = React.useState<GridRowId[]>([]); // 선택된 행의 ID를 저장할 상태
   const [totalPrice, setTotalPrice] = React.useState<number>(0); // 총 가격 상태 추가
-
+  const [isEmptyCart, setIsEmptyCart] = React.useState<boolean>(false); // 카트 비어있는지 상태 추가
   
 
   const fetchCartList = async () => {
@@ -21,8 +21,10 @@ const CartGrid: React.FC = () => {
       const response: CartItem[] = await cartList();
       console.log('Fetched cart list:', response);
       setRows(response);
+      setIsEmptyCart(response.length === 0);
     } catch (error) {
       console.error('Error fetching cart list:', error);
+      setIsEmptyCart(true); // 에러가 발생해도 카트가 비어있다고 설정
     }
   };
 
@@ -55,6 +57,7 @@ const CartGrid: React.FC = () => {
       const response: CartItem[] = await cartDelete(cartData);
       console.log('삭제 요청:', response);
       setRows(response);
+      setIsEmptyCart(response.length === 0); // 삭제 후 카트 비어있으면 상태 업데이트
     } catch (error) {
       console.error('카트 삭제 오류:', error);
     }
@@ -157,40 +160,49 @@ const CartGrid: React.FC = () => {
       setTotalPrice(total);
     }, [selectedRows, rows]);
   
-  return (
-    <Box sx={{ height: 800, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        rowHeight={100}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 6,
-            },
-          },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-        onRowSelectionModelChange={(newSelection) => {
-          setSelectedRows([...newSelection]); // 새로운 배열로 복사하여 상태 업데이트
-        }}
-      />
-      <Typography variant="h6" align="center" sx={{ mt: 2 }}>
-        총 가격: {totalPrice.toLocaleString()} 원
-      </Typography>
-      <Button 
-        variant="contained" 
-        color="success" 
-        fullWidth 
-        onClick={handleCartToOrder}
-        sx={{ mt: 2 }}
-      >
-        주문하기
-      </Button>
-    </Box>
-  );
-};
+    return (
+      <Box sx={{ height: 800, width: '100%' }}>
+        {isEmptyCart ? (
+          <Typography variant="h6" align="center" sx={{ mt: 2 }}>
+            카트가 비어 있습니다.
+          </Typography>
+        ) : (
+          <>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              rowHeight={100}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 6,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              checkboxSelection
+              disableRowSelectionOnClick
+              onRowSelectionModelChange={(newSelection) => {
+                setSelectedRows([...newSelection]);
+              }}
+            />
+            <Typography variant="h6" align="center" sx={{ mt: 2 }}>
+              총 가격: {totalPrice.toLocaleString()} 원
+            </Typography>
+            <Button 
+              variant="contained" 
+              color="success" 
+              fullWidth 
+              onClick={handleCartToOrder}
+              sx={{ mt: 2 }}
+            >
+              주문하기
+            </Button>
+          </>
+        )}
+      </Box>
+    );
+  };
+  
 
 export default CartGrid;
