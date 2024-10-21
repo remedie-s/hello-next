@@ -27,9 +27,14 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import DescriptionIcon from "@mui/icons-material/Description";
 import LayersIcon from "@mui/icons-material/Layers";
 import { AppProvider } from "@toolpad/core/AppProvider";
-import { DashboardLayout } from "@toolpad/core/DashboardLayout";
+import {
+  DashboardLayout,
+  type SidebarFooterProps,
+} from '@toolpad/core/DashboardLayout';
 // UI 컴포넌트에 사용 되는 타입
 import { type Router, type Navigation, SignInPage } from "@toolpad/core";
+
+import logo from "../image/logo.png";
 //TODO 세션관련 내용 획득
 import {
   getSession, //세션 체크용
@@ -52,9 +57,17 @@ import Main from "@/pages/Main";
 import OrderAdminGrid from "@/pages/orders/ordersAdmin";
 import LogoutPage from "@/pages/logout";
 import ProductDetail from "@/pages/detail/[id]";
+import { cartSummary } from "@/utils/api";
+import { cartSummaryType } from "@/types/datatype";
+import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
+import { useRouter } from "next/router";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
+
+
+
+
 
 const NAVIGATION: Navigation = [
   {
@@ -212,12 +225,16 @@ function DemoPageContent({ pathname, session }: IPage) {
         textAlign: "center",
       }}
     >
-      <Typography>Dashboard content for {pathname}</Typography>
-      {session && ( // 세션이 있을 때 사용자 정보 표시
+      {/* <Typography>Dashboard content for {pathname}</Typography> */}
+      {/* {session ? ( // 세션이 있을 때 사용자 정보 표시
         <Typography variant="h6">
-          안녕하세요, {session.name}님! 이메일: {session.email}
+          안녕하세요, {session.user.name}님! 이메일: {session.user.email}
         </Typography>
-      )}
+      ) : (
+        <Typography variant="h6">
+          로그인이 필요합니다.
+        </Typography>
+      )} */}
 
       {/* 특정 카테고리를 위한 부분 category가 all 이면 스프링 컨트롤러에서 처리해서 모든 상품을 보내줌*/}
       {isProductPage && category && <All category={category} />}
@@ -255,17 +272,104 @@ function DemoPageContent({ pathname, session }: IPage) {
     </Box>
   );
 }
+//MUI 버전 문제로 개고생함
+function SidebarFooter({ mini }: SidebarFooterProps) {
+  return (
+    <Typography
+      variant="caption"
+      sx={{ m: 1, whiteSpace: 'nowrap', overflow: 'hidden',  fontSize: '1.0em', }}
+    >
+      {mini ? '© MUI' : `© ${new Date().getFullYear()} Made with love by Jaehee Kim`}
+    </Typography>
+  );
+}
+
+function UserAccountAndCart() {
+  const [userId, setUserId] = React.useState<string | null>(null);
+  const [email, setEmail] = React.useState<string | null>(null);
+  const [username, setUsername] = React.useState<string | null>(null);
+  const [cartSum, setCartSum] = React.useState<cartSummaryType | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
+
+  // 사용자 정보 가져오기
+  React.useEffect(() => {
+    const savedUserId = sessionStorage.getItem("userId");
+    const savedEmail = sessionStorage.getItem("email");
+    const savedUsername = sessionStorage.getItem("username");
+
+    setUserId(savedUserId);
+    setEmail(savedEmail);
+    setUsername(savedUsername);
+  }, []);
+
+  // 카트 요약 정보 가져오기
+  const fetchCartSummary = async () => {
+    try {
+      const data = await cartSummary();
+      setCartSum(data);
+    } catch (error: any) {
+      setError(error.message || "카트 요약정보를 불러오는데 실패했습니다.");
+      console.error(error);
+    }
+  };
+  const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))({
+    [`& .${tooltipClasses.tooltip}`]: {
+      maxWidth: 500,
+      fontSize: '1.2em',
+    },
+  });
+  const router=useRouter();
+
+  React.useEffect(() => {
+    fetchCartSummary();
+  }, []); // 의존성 배열 수정
+
+  return (
+    <React.Fragment>
+      {userId && email ? (
+        <Typography variant="h6">
+          안녕하세요, {username}님 ({userId})! 이메일: {email}
+        </Typography>
+      ) : (
+        <Typography variant="h6" onClick={()=>{router.push("/login")}}>
+          먼저, 로그인을 해주세요.
+        </Typography>
+      )}
+     {cartSum?.totalCostSum && cartSum?.totalQuantitySum ? (
+        <CustomWidthTooltip title={`현재 카트에는 ${cartSum.totalQuantitySum}개 아이템, 총 ${cartSum.totalCostSum}원이 있습니다.`} >
+          <Typography variant="h6" component="span" style={{ cursor: 'pointer' }} onClick={()=>{
+            router.push("/carts/carts")
+          }}>
+          카트 정보
+          </Typography>
+        </CustomWidthTooltip >
+      ) : (
+        <Typography variant="h6">
+          미 로그인시 사이트 접속이 제한됩니다.
+        </Typography>
+      )}
+      
+    </React.Fragment>
+  );
+}
+
 
 export default function DashboardLayoutBasic(props: DemoProps) {
-  const { children } = props;
+  const { children, window } = props;
   const [pathname, setPathname] = React.useState("/dashboard");
+  const demoWindow = window !== undefined ? window() : undefined;
+  
+  
   const [session, setSession] = React.useState<{
-    name: string;
-    email: string;
+    user: {
+      name: string | null;
+      email: string | null;
+    };
   } | null>(null); // 세션 상태 추가
-  const setUserSession = (user: { name: string; email: string }) => {
-    setSession(user);
-  };
+  
+
   const router = React.useMemo<Router>(() => {
     return {
       pathname,
@@ -276,23 +380,36 @@ export default function DashboardLayoutBasic(props: DemoProps) {
       },
     };
   }, [pathname]);
+
+  // 로그인 시 세션 설정
   React.useEffect(() => {
     const userId = sessionStorage.getItem("userId");
     const email = sessionStorage.getItem("email");
     const username = sessionStorage.getItem("username");
-    // 세션이 존재하는 경우에만 설정
+
     if (userId && email && username) {
-      const userSession = { name: username, email: email }; // 사용자 세션 객체 생성
-      setSession(userSession); // 세션 설정
+      const userSession = { name: username, email: email };
+      setSession({ user: userSession }); // 세션 설정
     } else {
-      // 세션이 없으면 로그인 페이지로 리다이렉트
-      router.navigate("/login");
+      router.navigate("/login"); // 로그인 페이지로 리다이렉트
     }
   }, [router]);
+
   return (
-    <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
-      <DashboardLayout>
+    <AppProvider
+      navigation={NAVIGATION}
+      router={router}
+      theme={demoTheme}
+      window={demoWindow}
+      branding={{
+        logo: <img src={logo.src} alt="JAEHEE Logo" />,
+        title: 'JAEHEE',
+      }}
+      value={{ session, setSession }} // 로그인 정보와 설정 함수 전달
+    >
+      <DashboardLayout slots={{ sidebarFooter: SidebarFooter, toolbarActions:UserAccountAndCart}}>
         <DemoPageContent pathname={pathname} session={session}>
+          
           {/* children을 렌더링 */}
           {children}
         </DemoPageContent>
@@ -300,3 +417,4 @@ export default function DashboardLayoutBasic(props: DemoProps) {
     </AppProvider>
   );
 }
+

@@ -155,7 +155,7 @@ const columns: GridColDef[] = [
 ];
 
   return (
-    <Box sx={{ height: 800, width: '100%' }}>
+    <Box sx={{ height: '100%', width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}

@@ -101,6 +101,11 @@ export type cart= {
     price:number;
     quantity:number;
 }
+export type cartSummaryType = {
+    userId : number;
+    totalCostSum :number;
+    totalQuantitySum :number;
+}
 
 export type cartModifyData={
     id:number;

@@ -248,8 +248,8 @@ export default async function handler(req, res) {
 주의사항
 CORS는 보안 관련 설정이므로, 실제 운영 환경에서는 origin을 보다 구체적으로 설정하는 것이 좋습니다.
 모든 API 라우트에 대해 CORS를 설정하고 싶다면, 공통 미들웨어로 처리하는 방법도 고려할 수 있습니다.
-
-
+로고 만든곳
+https://app.logomaster.ai/
 
 
 

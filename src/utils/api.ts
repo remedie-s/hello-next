@@ -151,6 +151,17 @@ export const cartList = async ()=>{
         throw error.response.data; // 실패시
     }    
 }
+export const cartSummary = async ()=>{
+    try{const response = await api.get(`${API_URL}/api/cart/summary`,{
+        headers :{
+            'Content-Type' :'application/json',
+        },
+    });
+    return response.data;}// 성공시
+    catch(error:any){
+        throw error.response.data; // 실패시
+    }    
+}
 
 
 export const cartModify = async (cartData:cartModifyData)=>{

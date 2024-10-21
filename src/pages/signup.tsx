@@ -4,7 +4,9 @@ import { signup } from "../utils/api";
 import TextField from "@mui/material/TextField";
 import Button from '@mui/material/Button';
 import Box from "@mui/material/Box";
+import { useRouter } from "next/router";
 const SignupPage: FC = () => {
+  const router=useRouter();
   const [formData, setFormData] = useState({
     username: "",
     password1: "",
@@ -29,6 +31,13 @@ const SignupPage: FC = () => {
     setSuccess(null);
     console.log(formData);
 
+  const goMain = () => {
+    setTimeout(()=>{
+      router.push("/Main"); // 또는 원하는 메인 페이지의 경로로 수정
+    },1000)
+    
+  }
+
     try {
       const result = await signup(formData);
       setSuccess(result);
@@ -41,7 +50,7 @@ const SignupPage: FC = () => {
       sessionStorage.setItem("username", username);
       // sessionStorage.setItem("accessToken", accessToken);
       // sessionStorage.setItem("refreshToken", refreshToken);
-
+      
       setFormData({
         username: "",
         password1: "",
@@ -51,6 +60,9 @@ const SignupPage: FC = () => {
         phoneNumber: "",
         email: "",
       });
+
+      goMain();
+    
     } catch (error: any) {
       const errorMessage =
         error.response?.data || error.message || "Unknown error occurred";

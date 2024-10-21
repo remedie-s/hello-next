@@ -161,7 +161,7 @@ const CartGrid: React.FC = () => {
     }, [selectedRows, rows]);
   
     return (
-      <Box sx={{ height: 800, width: '100%' }}>
+      <Box sx={{ height: '100%', width: '100%' }}>
         {isEmptyCart ? (
           <Typography variant="h6" align="center" sx={{ mt: 2 }}>
             카트가 비어 있습니다.
@@ -171,11 +171,11 @@ const CartGrid: React.FC = () => {
             <DataGrid
               rows={rows}
               columns={columns}
-              rowHeight={100}
+              rowHeight={70}
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 6,
+                    pageSize: 5,
                   },
                 },
               }}
