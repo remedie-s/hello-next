@@ -149,3 +149,18 @@ export type ChartDataProduct={
 export type ChartDataCate={
     category : number;
 }
+export type userData={
+    id:number;
+    username:string;
+    // password:string; // 원래대로라면 스프링에서 가공하고 보내야함
+    firstName:string;
+    lastName:string;
+    phoneNumber:string;
+    email:string;
+    userGrade:string;
+    createDate:Date;
+}
+export type userGradeData={
+    userGrade:number;
+    id:number;
+}

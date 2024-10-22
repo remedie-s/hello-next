@@ -1,5 +1,5 @@
 import axios from "axios";
-import {loginData,signupData,prouctToCartData, addressRegData, productRegData, cart,  cartModifyData, cartToOrderData, orderModifyData, orderDeleteData, productReveiwRegData} from '../types/datatype'
+import {loginData,signupData,prouctToCartData, addressRegData, productRegData, cart,  cartModifyData, cartToOrderData, orderModifyData, orderDeleteData, productReveiwRegData, userGradeData} from '../types/datatype'
 
 const API_URL =  'http://localhost:8080'; // spring boot 유저 처리 페이지
 const api = axios.create({
@@ -295,3 +295,28 @@ export const ChartDataByTotalCostOfProduct = async ()=>{
         throw error.response.data; // 실패시
     }    
 }
+
+export const UserData = async ()=>{
+    try{const response = await api.get(`${API_URL}/spmallUser/userList`,{
+        headers :{
+            'Content-Type' :'application/json',
+        },
+    });
+    return response.data;}// 성공시
+    catch(error:any){
+        throw error.response.data; // 실패시
+    }    
+}
+export const UserGradeModify = async (userData:userGradeData)=>{
+    try{
+        const response = await api.post(`${API_URL}/spmallUser/modifyGrade/${userData.id}`,userData, {
+            headers :{
+                'Content-Type' :'application/json',
+            },
+        });
+        return response.data; // 성공시
+    } catch(error:any){
+        throw error.response.data; // 실패시
+    }
+}
+

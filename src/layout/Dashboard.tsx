@@ -72,6 +72,7 @@ import Chart1 from "@/pages/Chart1";
 import Chart3 from "@/pages/Chart3";
 import Chart4 from "@/pages/Chart4";
 import Chart2 from "@/pages/Chart2";
+import UserGradeGrid from "@/pages/UserGrade";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
@@ -197,6 +198,11 @@ const NAVIGATION: Navigation = [
     title: "차트4",
     icon: <ShoppingBagIcon />,
   },
+  {
+    segment: "UserGrade",
+    title: "유저 등급 변경",
+    icon: <ShoppingBagIcon />,
+  },
 ];
 
 const demoTheme = createTheme({
@@ -294,12 +300,15 @@ function DemoPageContent({ pathname, session, children }: IPage) {
       {pathname === "/ordersAdmin" && <OrderAdminGrid />}
       {/* 차트 1번 페이지 */}
       {pathname === "/Chart1" && <Chart1 />}
-      {/* 차트 1번 페이지 */}
+      {/* 차트 2번 페이지 */}
       {pathname === "/Chart2" && <Chart2 />}
-      {/* 차트 1번 페이지 */}
+      {/* 차트 3번 페이지 */}
       {pathname === "/Chart3" && <Chart3 />}
-      {/* 차트 1번 페이지 */}
+      {/* 차트 4번 페이지 */}
       {pathname === "/Chart4" && <Chart4 />}
+      {/* 유저 등급관리 페이지 */}
+      {pathname === "/UserGrade" && <UserGradeGrid />}
+
         {/* {children} */}
       {currentChildren}
     </Box>
