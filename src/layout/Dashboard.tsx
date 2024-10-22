@@ -227,7 +227,7 @@ function DemoPageContent({ pathname, session, children }: IPage) {
   // pathname이 변경될 때마다 children을 초기화
   React.useEffect(() => {
     console.log(pathname);
-    if (pathname.startsWith("/Main")) {
+    if (pathname===("/Main")||pathname===("/")||pathname===("/dashboard")) {
       setCurrentChildren(children);
     } else {
       setCurrentChildren(null);
@@ -300,7 +300,7 @@ function DemoPageContent({ pathname, session, children }: IPage) {
       {pathname === "/Chart3" && <Chart3 />}
       {/* 차트 1번 페이지 */}
       {pathname === "/Chart4" && <Chart4 />}
-
+        {/* {children} */}
       {currentChildren}
     </Box>
   );
@@ -448,7 +448,7 @@ export default function DashboardLayoutBasic(props: DemoProps) {
       window={demoWindow}
       branding={{
         logo: <img src={logo.src} alt="JAEHEE Logo" />,
-        title: "JAEHEE",
+        title: "Jaehee's Internet Shopping Mall",
       }}
       value={{ session, setSession }} // 로그인 정보와 설정 함수 전달
     >
@@ -459,8 +459,7 @@ export default function DashboardLayoutBasic(props: DemoProps) {
         }}
       >
         <DemoPageContent pathname={pathname} session={session}>
-          {/* children을 렌더링 */}
-          {children}
+        {children}
         </DemoPageContent>
       </DashboardLayout>
     </AppProvider>
