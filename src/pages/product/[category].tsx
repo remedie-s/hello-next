@@ -5,6 +5,7 @@ import { productList } from '../../utils/api';
 import { productCate } from '@/types/datatype';
 import { useRouter } from 'next/router'; 
 import Link from 'next/link'; 
+import Dashboard from '../../layout/Dashboard'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -39,6 +40,7 @@ const All: React.FC<AllProps> = ({ category }) => {
   }, [category]);
 
   return (
+    <div>
     <Box sx={{ flexGrow: 1 }}>
       {error && <div style={{ color: 'red' }}>{error}</div>}
       <Grid2 container spacing={{ xs: 2, md:4 }} columns={{ xs: 4, sm: 5, md: 6 }}>
@@ -57,6 +59,7 @@ const All: React.FC<AllProps> = ({ category }) => {
         ))}
       </Grid2>
     </Box>
+    </div>
   );
 }
 

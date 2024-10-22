@@ -220,6 +220,7 @@ function DemoPageContent({ pathname, session,children }: IPage) {
   const [currentChildren, setCurrentChildren] = React.useState<React.ReactNode>(null);
    // pathname이 변경될 때마다 children을 초기화
    React.useEffect(() => {
+    // setCurrentChildren(null);
     console.log(pathname);
     if(pathname.startsWith("/product")){
     setCurrentChildren(children);} else{
@@ -236,22 +237,13 @@ function DemoPageContent({ pathname, session,children }: IPage) {
         textAlign: "center",
       }}
     >
-      {/* <Typography>Dashboard content for {pathname}</Typography> */}
-      {/* {session ? ( // 세션이 있을 때 사용자 정보 표시
-        <Typography variant="h6">
-          안녕하세요, {session.user.name}님! 이메일: {session.user.email}
-        </Typography>
-      ) : (
-        <Typography variant="h6">
-          로그인이 필요합니다.
-        </Typography>
-      )} */}
+     
 
       {/* 특정 카테고리를 위한 부분 category가 all 이면 스프링 컨트롤러에서 처리해서 모든 상품을 보내줌*/}
       {isProductPage && category && <All category={category} />}
 
       {/* 상품 상세 페이지 */}
-      {pathname == ("/detail/:segment") && <ProductDetail productId={Number(productId)}/>}
+      {/* {pathname == ("/detail/:segment") && <ProductDetail productId={Number(productId)}/>} */}
       {/* {isProductDetailPage && productId && (
         <ProductDetail productId={Number(productId)} />
       )} */}
