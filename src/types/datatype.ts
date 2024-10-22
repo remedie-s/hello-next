@@ -142,3 +142,10 @@ export interface ChartData {
     grocery: number;
     toy: number;
   }
+
+export type ChartDataProduct={
+    productName : number;
+}
+export type ChartDataCate={
+    category : number;
+}

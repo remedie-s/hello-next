@@ -251,8 +251,41 @@ export const orderDelete = async (orderData:orderDeleteData)=>{
     }
 }
 
-export const chartBySellCountAndCate = async ()=>{
-    try{const response = await api.get(`${API_URL}/api/product/chartBySellcount`,{
+export const ChartDataBySellCountOfCate = async ()=>{
+    try{const response = await api.get(`${API_URL}/api/product/ChartDataBySellCountOfCate`,{
+        headers :{
+            'Content-Type' :'application/json',
+        },
+    });
+    return response.data;}// 성공시
+    catch(error:any){
+        throw error.response.data; // 실패시
+    }    
+}
+export const ChartDataByTotalCostOfCate = async ()=>{
+    try{const response = await api.get(`${API_URL}/api/product/ChartDataByTotalCostOfCate`,{
+        headers :{
+            'Content-Type' :'application/json',
+        },
+    });
+    return response.data;}// 성공시
+    catch(error:any){
+        throw error.response.data; // 실패시
+    }    
+}
+export const ChartDataBySellCountOfProduct = async ()=>{
+    try{const response = await api.get(`${API_URL}/api/product/ChartDataBySellCountOfProduct`,{
+        headers :{
+            'Content-Type' :'application/json',
+        },
+    });
+    return response.data;}// 성공시
+    catch(error:any){
+        throw error.response.data; // 실패시
+    }    
+}
+export const ChartDataByTotalCostOfProduct = async ()=>{
+    try{const response = await api.get(`${API_URL}/api/product/ChartDataByTotalCostOfProduct`,{
         headers :{
             'Content-Type' :'application/json',
         },

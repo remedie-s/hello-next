@@ -27,6 +27,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import DescriptionIcon from "@mui/icons-material/Description";
 import LayersIcon from "@mui/icons-material/Layers";
 import { AppProvider } from "@toolpad/core/AppProvider";
+
 import {
   DashboardLayout,
   type SidebarFooterProps,
@@ -67,6 +68,10 @@ import {
   TooltipProps,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import Chart1 from "@/pages/Chart1";
+import Chart3 from "@/pages/Chart3";
+import Chart4 from "@/pages/Chart4";
+import Chart2 from "@/pages/Chart2";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
@@ -166,31 +171,31 @@ const NAVIGATION: Navigation = [
   {
     kind: "divider",
   },
+
   {
     kind: "header",
     title: "통계",
   },
+
   {
-    segment: "reports",
-    title: "Reports",
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: "sales",
-        title: "Sales",
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: "traffic",
-        title: "Traffic",
-        icon: <DescriptionIcon />,
-      },
-    ],
+    segment: "Chart1",
+    title: "차트1",
+    icon: <ShoppingBagIcon />,
   },
   {
-    segment: "integrations",
-    title: "Integrations",
-    icon: <LayersIcon />,
+    segment: "Chart2",
+    title: "차트2",
+    icon: <ShoppingBagIcon />,
+  },
+  {
+    segment: "Chart3",
+    title: "차트3",
+    icon: <ShoppingBagIcon />,
+  },
+  {
+    segment: "Chart4",
+    title: "차트4",
+    icon: <ShoppingBagIcon />,
   },
 ];
 
@@ -212,19 +217,23 @@ const demoTheme = createTheme({
 // 컴포넌트의 인자 -> props 인데 아래와 같은 표현은 => (중괄호)<- props 를 바로객체 구조분해
 //function DemoPageContent(props : { pathname: string }){
 //function DemoPageContent(props : 타입){
-function DemoPageContent({ pathname, session,children }: IPage) {
+function DemoPageContent({ pathname, session, children }: IPage) {
   const isProductPage = pathname.startsWith("/product/");
   const isProductDetailPage = pathname.startsWith("/detail");
   const category = isProductPage ? pathname.split("/")[2] : null; // '/product/' 다음의 부분이 카테고리
   const productId = isProductDetailPage ? pathname.split("/")[2] : null; // '/product/' 다음의 부분이 카테고리
-  const [currentChildren, setCurrentChildren] = React.useState<React.ReactNode>(null);
-   // pathname이 변경될 때마다 children을 초기화
-   React.useEffect(() => {
+  const [currentChildren, setCurrentChildren] =
+    React.useState<React.ReactNode>(null);
+  // pathname이 변경될 때마다 children을 초기화
+  React.useEffect(() => {
     console.log(pathname);
-    if(pathname.startsWith("/product")){
-    setCurrentChildren(children);} else{
-      setCurrentChildren(null)
+    if (pathname.startsWith("/Main")) {
+      setCurrentChildren(children);
+    } else {
+      setCurrentChildren(null);
     }
+    
+   
   }, [pathname, children]);
   return (
     <Box
@@ -251,12 +260,15 @@ function DemoPageContent({ pathname, session,children }: IPage) {
       {isProductPage && category && <All category={category} />}
 
       {/* 상품 상세 페이지 */}
-      {pathname == ("/detail/:segment") && <ProductDetail productId={Number(productId)}/>}
+      {pathname == "/detail/:segment" && (
+        <ProductDetail productId={Number(productId)} />
+      )}
       {/* {isProductDetailPage && productId && (
         <ProductDetail productId={Number(productId)} />
       )} */}
+      
       {/* 메인 페이지 */}
-      {pathname === "/Main" && <Main />}
+      {pathname === "/Main" && <Main /> }
 
       {/* 로그인 페이지 */}
       {pathname === "/login" && <LoginPage />}
@@ -280,8 +292,16 @@ function DemoPageContent({ pathname, session,children }: IPage) {
       {pathname === "/orders" && <OrderGrid />}
       {/* 오더 관리 페이지 */}
       {pathname === "/ordersAdmin" && <OrderAdminGrid />}
+      {/* 차트 1번 페이지 */}
+      {pathname === "/Chart1" && <Chart1 />}
+      {/* 차트 1번 페이지 */}
+      {pathname === "/Chart2" && <Chart2 />}
+      {/* 차트 1번 페이지 */}
+      {pathname === "/Chart3" && <Chart3 />}
+      {/* 차트 1번 페이지 */}
+      {pathname === "/Chart4" && <Chart4 />}
+
       {currentChildren}
-      
     </Box>
   );
 }
