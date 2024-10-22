@@ -30,7 +30,7 @@ import { AppProvider } from "@toolpad/core/AppProvider";
 import {
   DashboardLayout,
   type SidebarFooterProps,
-} from '@toolpad/core/DashboardLayout';
+} from "@toolpad/core/DashboardLayout";
 // UI 컴포넌트에 사용 되는 타입
 import { type Router, type Navigation, SignInPage } from "@toolpad/core";
 
@@ -59,15 +59,17 @@ import LogoutPage from "@/pages/logout";
 import ProductDetail from "@/pages/detail/[id]";
 import { cartSummary } from "@/utils/api";
 import { cartSummaryType } from "@/types/datatype";
-import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
+import {
+  Badge,
+  styled,
+  Tooltip,
+  tooltipClasses,
+  TooltipProps,
+} from "@mui/material";
 import { useRouter } from "next/router";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
-
-
-
-
 
 const NAVIGATION: Navigation = [
   {
@@ -210,11 +212,20 @@ const demoTheme = createTheme({
 // 컴포넌트의 인자 -> props 인데 아래와 같은 표현은 => (중괄호)<- props 를 바로객체 구조분해
 //function DemoPageContent(props : { pathname: string }){
 //function DemoPageContent(props : 타입){
-function DemoPageContent({ pathname, session }: IPage) {
+function DemoPageContent({ pathname, session,children }: IPage) {
   const isProductPage = pathname.startsWith("/product/");
   const isProductDetailPage = pathname.startsWith("/detail");
   const category = isProductPage ? pathname.split("/")[2] : null; // '/product/' 다음의 부분이 카테고리
   const productId = isProductDetailPage ? pathname.split("/")[2] : null; // '/product/' 다음의 부분이 카테고리
+  const [currentChildren, setCurrentChildren] = React.useState<React.ReactNode>(null);
+   // pathname이 변경될 때마다 children을 초기화
+   React.useEffect(() => {
+    console.log(pathname);
+    if(pathname.startsWith("/product")){
+    setCurrentChildren(children);} else{
+      setCurrentChildren(null)
+    }
+  }, [pathname, children]);
   return (
     <Box
       sx={{
@@ -240,10 +251,10 @@ function DemoPageContent({ pathname, session }: IPage) {
       {isProductPage && category && <All category={category} />}
 
       {/* 상품 상세 페이지 */}
-      {/* {pathname == ("/product/detail/:segment") && <ProductDetail/>} */}
-      {isProductDetailPage && productId && (
+      {pathname == ("/detail/:segment") && <ProductDetail productId={Number(productId)}/>}
+      {/* {isProductDetailPage && productId && (
         <ProductDetail productId={Number(productId)} />
-      )}
+      )} */}
       {/* 메인 페이지 */}
       {pathname === "/Main" && <Main />}
 
@@ -269,6 +280,8 @@ function DemoPageContent({ pathname, session }: IPage) {
       {pathname === "/orders" && <OrderGrid />}
       {/* 오더 관리 페이지 */}
       {pathname === "/ordersAdmin" && <OrderAdminGrid />}
+      {currentChildren}
+      
     </Box>
   );
 }
@@ -277,9 +290,11 @@ function SidebarFooter({ mini }: SidebarFooterProps) {
   return (
     <Typography
       variant="caption"
-      sx={{ m: 1, whiteSpace: 'nowrap', overflow: 'hidden',  fontSize: '1.0em', }}
+      sx={{ m: 1, whiteSpace: "nowrap", overflow: "hidden", fontSize: "1.0em" }}
     >
-      {mini ? '© MUI' : `© ${new Date().getFullYear()} Made with love by Jaehee Kim`}
+      {mini
+        ? "© MUI"
+        : `© ${new Date().getFullYear()} Made with love by Jaehee Kim`}
     </Typography>
   );
 }
@@ -317,10 +332,10 @@ function UserAccountAndCart() {
   ))({
     [`& .${tooltipClasses.tooltip}`]: {
       maxWidth: 500,
-      fontSize: '1.2em',
+      fontSize: "1.2em",
     },
   });
-  const router=useRouter();
+  const router = useRouter();
 
   React.useEffect(() => {
     fetchCartSummary();
@@ -333,42 +348,52 @@ function UserAccountAndCart() {
           안녕하세요, {username}님 ({userId})! 이메일: {email}
         </Typography>
       ) : (
-        <Typography variant="h6" onClick={()=>{router.push("/login")}}>
+        <Typography
+          variant="h6"
+          onClick={() => {
+            router.push("/login");
+          }}
+        >
           먼저, 로그인을 해주세요.
         </Typography>
       )}
-     {cartSum?.totalCostSum && cartSum?.totalQuantitySum ? (
-        <CustomWidthTooltip title={`현재 카트에는 ${cartSum.totalQuantitySum}개 아이템, 총 ${cartSum.totalCostSum}원이 있습니다.`} >
-          <Typography variant="h6" component="span" style={{ cursor: 'pointer' }} onClick={()=>{
-            router.push("/carts/carts")
-          }}>
-          카트 정보
+      {cartSum?.totalCostSum && cartSum?.totalQuantitySum ? (
+        <CustomWidthTooltip
+          title={`현재 카트에는 ${cartSum.totalQuantitySum}개 아이템, 총 ${cartSum.totalCostSum}원이 있습니다.`}
+        >
+          <Typography
+            variant="h6"
+            component="span"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              router.push("/carts/carts");
+            }}
+          >
+            <Badge color="secondary" badgeContent={cartSum.totalQuantitySum}>
+              <ShoppingCartIcon />
+            </Badge>
           </Typography>
-        </CustomWidthTooltip >
+        </CustomWidthTooltip>
       ) : (
         <Typography variant="h6">
           미 로그인시 사이트 접속이 제한됩니다.
         </Typography>
       )}
-      
     </React.Fragment>
   );
 }
-
 
 export default function DashboardLayoutBasic(props: DemoProps) {
   const { children, window } = props;
   const [pathname, setPathname] = React.useState("/dashboard");
   const demoWindow = window !== undefined ? window() : undefined;
-  
-  
+
   const [session, setSession] = React.useState<{
     user: {
       name: string | null;
       email: string | null;
     };
   } | null>(null); // 세션 상태 추가
-  
 
   const router = React.useMemo<Router>(() => {
     return {
@@ -403,13 +428,17 @@ export default function DashboardLayoutBasic(props: DemoProps) {
       window={demoWindow}
       branding={{
         logo: <img src={logo.src} alt="JAEHEE Logo" />,
-        title: 'JAEHEE',
+        title: "JAEHEE",
       }}
       value={{ session, setSession }} // 로그인 정보와 설정 함수 전달
     >
-      <DashboardLayout slots={{ sidebarFooter: SidebarFooter, toolbarActions:UserAccountAndCart}}>
+      <DashboardLayout
+        slots={{
+          sidebarFooter: SidebarFooter,
+          toolbarActions: UserAccountAndCart,
+        }}
+      >
         <DemoPageContent pathname={pathname} session={session}>
-          
           {/* children을 렌더링 */}
           {children}
         </DemoPageContent>
@@ -417,4 +446,3 @@ export default function DashboardLayoutBasic(props: DemoProps) {
     </AppProvider>
   );
 }
-

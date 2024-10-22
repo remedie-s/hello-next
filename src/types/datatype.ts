@@ -135,3 +135,10 @@ export type orderDeleteData={
     id:number;
     userId:number;
 }
+
+export interface ChartData {
+    elect: number;
+    furniture: number;
+    grocery: number;
+    toy: number;
+  }

@@ -17,7 +17,7 @@ import Typography from "@mui/material/Typography";
 import DashboardLayoutBasic from "@/layout/Dashboard";
 import StarIcon from "@mui/icons-material/Star";
 import Rating from "@mui/material/Rating";
-
+import Dashboard from '../../layout/Dashboard'
 interface productId {
   productId: number; // category prop 추가
 }
@@ -154,7 +154,9 @@ const ProductDetail: React.FC<productId>  = ({productId}) => {
   
 
   return (
+    <Dashboard>
     <div>
+      
       {error && <div style={{ color: "red" }}>{String(error)}</div>}
       {successMessage && <div style={{ color: "green" }}>{successMessage}</div>}
       <CssBaseline />
@@ -277,7 +279,9 @@ const ProductDetail: React.FC<productId>  = ({productId}) => {
           )}
         </Box>
       </Container>
+      
     </div>
+    </Dashboard>
   );
 };
 // 레이아웃 적용을 위한 getLayout 함수
