@@ -154,7 +154,6 @@ const ProductDetail: React.FC<productId>  = ({productId}) => {
   
 
   return (
-    <Dashboard>
     <div>
       
       {error && <div style={{ color: "red" }}>{String(error)}</div>}
@@ -281,7 +280,6 @@ const ProductDetail: React.FC<productId>  = ({productId}) => {
       </Container>
       
     </div>
-    </Dashboard>
   );
 };
 // 레이아웃 적용을 위한 getLayout 함수
