@@ -47,44 +47,44 @@ const UserGradeGrid: React.FC = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "유저 고유번호", width: 90 },
+    { field: "id", headerName: "고유번호", width: 100 },
     {
       field: "username",
       headerName: "유저아이디",
-      width: 100,
+      width: 150,
       editable: false,
     },
     {
       field: "firstName",
       headerName: "이름",
-      width: 150,
+      width: 100,
       editable: false,
     },
     {
       field: "lastName",
       headerName: "성",
-      width: 150,
+      width: 100,
       editable: false,
     },
     {
       field: "phoneNumber",
       headerName: "전화번호",
       type: "number",
-      width: 200,
+      width: 150,
       editable: false,
     },
     {
       field: "email",
       headerName: "이메일",
       type: "number",
-      width: 150,
+      width: 200,
       editable: false,
     },
     {
       field: "userGrade",
       headerName: "유저등급",
       type: "number",
-      width: 200,
+      width: 100,
       editable: true,
     },
     

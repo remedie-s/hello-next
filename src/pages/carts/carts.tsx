@@ -25,6 +25,10 @@ const CartGrid: React.FC = () => {
     } catch (error) {
       console.error('Error fetching cart list:', error);
       setIsEmptyCart(true); // 에러가 발생해도 카트가 비어있다고 설정
+      console.log("카트가 비어있어 메인페이지로 돌아갑니다.")
+      const timer = setTimeout(()=>{ router.push("/");},3000)
+      
+       
     }
   };
 
@@ -58,6 +62,10 @@ const CartGrid: React.FC = () => {
       console.log('삭제 요청:', response);
       setRows(response);
       setIsEmptyCart(response.length === 0); // 삭제 후 카트 비어있으면 상태 업데이트
+      if(isEmptyCart){
+        console.log("카트가 비어있어 메인페이지로 돌아갑니다.")
+        router.push("/");
+      }
     } catch (error) {
       console.error('카트 삭제 오류:', error);
     }
@@ -164,8 +172,9 @@ const CartGrid: React.FC = () => {
       <Box sx={{ height: '100%', width: '100%' }}>
         {isEmptyCart ? (
           <Typography variant="h6" align="center" sx={{ mt: 2 }}>
-            카트가 비어 있습니다.
+            카트가 비어 있습니다. 3초후 메인페이지로 이동합니다.
           </Typography>
+         
         ) : (
           <>
             <DataGrid

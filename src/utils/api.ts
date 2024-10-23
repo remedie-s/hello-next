@@ -297,7 +297,7 @@ export const ChartDataByTotalCostOfProduct = async ()=>{
 }
 
 export const UserData = async ()=>{
-    try{const response = await api.get(`${API_URL}/spmallUser/userList`,{
+    try{const response = await api.get(`${API_URL}/api/order/userList`,{
         headers :{
             'Content-Type' :'application/json',
         },
@@ -309,7 +309,7 @@ export const UserData = async ()=>{
 }
 export const UserGradeModify = async (userData:userGradeData)=>{
     try{
-        const response = await api.post(`${API_URL}/spmallUser/modifyGrade/${userData.id}`,userData, {
+        const response = await api.post(`${API_URL}/api/order/modifyGrade/${userData.id}`,userData, {
             headers :{
                 'Content-Type' :'application/json',
             },

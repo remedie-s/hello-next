@@ -23,9 +23,12 @@ import InputIcon from "@mui/icons-material/Input";
 import HomeIcon from "@mui/icons-material/Home";
 import ChairIcon from "@mui/icons-material/Chair";
 import StoreIcon from "@mui/icons-material/Store";
+import LegendToggleIcon from '@mui/icons-material/LegendToggle';
 import BarChartIcon from "@mui/icons-material/BarChart";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import DescriptionIcon from "@mui/icons-material/Description";
 import LayersIcon from "@mui/icons-material/Layers";
+import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
 import { AppProvider } from "@toolpad/core/AppProvider";
 
 import {
@@ -68,10 +71,10 @@ import {
   TooltipProps,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import Chart1 from "@/pages/Chart1";
-import Chart3 from "@/pages/Chart3";
-import Chart4 from "@/pages/Chart4";
-import Chart2 from "@/pages/Chart2";
+import Chart1 from "@/pages/chart/Chart1";
+import Chart3 from "@/pages/chart/Chart3";
+import Chart4 from "@/pages/chart/Chart4";
+import Chart2 from "@/pages/chart/Chart2";
 import UserGradeGrid from "@/pages/UserGrade";
 
 // 커스텀 컴포넌트 가져오기
@@ -177,31 +180,40 @@ const NAVIGATION: Navigation = [
     kind: "header",
     title: "통계",
   },
-
   {
-    segment: "Chart1",
-    title: "차트1",
-    icon: <ShoppingBagIcon />,
+    segment: "chart",
+    title: "통계",
+    icon: <BarChartIcon />,
+    children: [
+      {
+        segment: "Chart1",
+        title: "차트1",
+        icon: <SignalCellularAltIcon />,
+      },
+      {
+        segment: "Chart2",
+        title: "차트2",
+        icon: <SignalCellularAltIcon />,
+      },
+      {
+        segment: "Chart3",
+        title: "차트3",
+        icon: <SignalCellularAltIcon />,
+      },
+      {
+        segment: "Chart4",
+        title: "차트4",
+        icon: <SignalCellularAltIcon />,
+      },
+    ],
   },
   {
-    segment: "Chart2",
-    title: "차트2",
-    icon: <ShoppingBagIcon />,
-  },
-  {
-    segment: "Chart3",
-    title: "차트3",
-    icon: <ShoppingBagIcon />,
-  },
-  {
-    segment: "Chart4",
-    title: "차트4",
-    icon: <ShoppingBagIcon />,
+    kind: "divider",
   },
   {
     segment: "UserGrade",
     title: "유저 등급 변경",
-    icon: <ShoppingBagIcon />,
+    icon: <ManageAccountsIcon />,
   },
 ];
 
@@ -383,7 +395,7 @@ function UserAccountAndCart() {
             router.push("/login");
           }}
         >
-          먼저, 로그인을 해주세요.
+          먼저, 로그인을 해주세요. 미 로그인시 사이트 접속이 제한됩니다.
         </Typography>
       )}
       {cartSum?.totalCostSum && cartSum?.totalQuantitySum ? (
@@ -405,7 +417,9 @@ function UserAccountAndCart() {
         </CustomWidthTooltip>
       ) : (
         <Typography variant="h6">
-          미 로그인시 사이트 접속이 제한됩니다.
+           <Badge color="secondary" badgeContent={0}>
+              <ShoppingCartIcon />
+            </Badge>
         </Typography>
       )}
     </React.Fragment>

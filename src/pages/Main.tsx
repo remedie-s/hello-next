@@ -1,9 +1,9 @@
 import ResponsiveGrid from "@/layout/ResponsiveGrid";
 import Dashboard from "../layout/Dashboard";
-import Chart1 from "@/pages/Chart1";
-import Chart2 from "@/pages/Chart2";
-import Chart3 from "@/pages/Chart3";
-import Chart4 from "@/pages/Chart4";
+import Chart1 from "@/pages/chart/Chart1";
+import Chart2 from "@/pages/chart/Chart2";
+import Chart3 from "@/pages/chart/Chart3";
+import Chart4 from "@/pages/chart/Chart4";
 import { AppProvider, PageContainer } from "@toolpad/core";
 
 const Main = () => {
