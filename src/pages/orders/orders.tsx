@@ -138,7 +138,7 @@ const columns: GridColDef[] = [
   },
   {
     field: 'modify',
-    headerName: '수정',
+    headerName: '반품신청',
     width: 130,
     renderCell: (params) => (
       <Button variant="outlined" color="secondary" onClick={() => handleModify(params.row)}>반품신청</Button>

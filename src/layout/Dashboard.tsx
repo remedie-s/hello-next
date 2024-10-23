@@ -76,146 +76,12 @@ import Chart3 from "@/pages/chart/Chart3";
 import Chart4 from "@/pages/chart/Chart4";
 import Chart2 from "@/pages/chart/Chart2";
 import UserGradeGrid from "@/pages/UserGrade";
+import ChartAll from "@/pages/chart/ChartAll";
 
 // 커스텀 컴포넌트 가져오기
 // import Main from '../jsTots';
 
-const NAVIGATION: Navigation = [
-  {
-    kind: "header",
-    title: "로그인 정보",
-  },
-  {
-    segment: "signup",
-    title: "회원 가입",
-    icon: <LockOpenIcon />,
-  },
-  {
-    segment: "login",
-    title: "로그인",
-    icon: <LoginIcon />,
-  },
-  {
-    segment: "logout",
-    title: "로그아웃",
-    icon: <LogoutIcon />,
-  },
-  {
-    kind: "divider",
-  },
-  {
-    kind: "header",
-    title: "판매 물품",
-  },
-  {
-    segment: "productCreate",
-    title: "물품등록",
-    icon: <InputIcon />,
-  },
-  {
-    segment: "product",
-    title: "판매 물품",
-    icon: <StoreIcon />,
-    children: [
-      {
-        segment: "all",
-        title: "전체",
-        icon: <ShopIcon />,
-      },
-      {
-        segment: "grocery",
-        title: "식품",
-        icon: <RestaurantIcon />,
-      },
-      {
-        segment: "furniture",
-        title: "가구",
-        icon: <ChairIcon />,
-      },
-      {
-        segment: "elect",
-        title: "전자 제품",
-        icon: <ComputerIcon />,
-      },
-      {
-        segment: "toy",
-        title: "완구",
-        icon: <ToysIcon />,
-      },
-    ],
-  },
 
-  {
-    kind: "divider",
-  },
-  {
-    kind: "header",
-    title: "주문 및 카트",
-  },
-  {
-    segment: "carts",
-    title: "카트",
-    icon: <ShoppingCartIcon />,
-  },
-  {
-    segment: "orders",
-    title: "주문",
-    icon: <ShoppingBagIcon />,
-  },
-  {
-    segment: "ordersAdmin",
-    title: "주문관리",
-    icon: <ShoppingBagIcon />,
-  },
-  {
-    segment: "addressCreate",
-    title: "주소 설정",
-    icon: <HomeIcon />,
-  },
-  {
-    kind: "divider",
-  },
-
-  {
-    kind: "header",
-    title: "통계",
-  },
-  {
-    segment: "chart",
-    title: "통계",
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: "Chart1",
-        title: "차트1",
-        icon: <SignalCellularAltIcon />,
-      },
-      {
-        segment: "Chart2",
-        title: "차트2",
-        icon: <SignalCellularAltIcon />,
-      },
-      {
-        segment: "Chart3",
-        title: "차트3",
-        icon: <SignalCellularAltIcon />,
-      },
-      {
-        segment: "Chart4",
-        title: "차트4",
-        icon: <SignalCellularAltIcon />,
-      },
-    ],
-  },
-  {
-    kind: "divider",
-  },
-  {
-    segment: "UserGrade",
-    title: "유저 등급 변경",
-    icon: <ManageAccountsIcon />,
-  },
-];
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -243,6 +109,7 @@ function DemoPageContent({ pathname, session, children }: IPage) {
   const [currentChildren, setCurrentChildren] =
     React.useState<React.ReactNode>(null);
   // pathname이 변경될 때마다 children을 초기화
+  const [userGrade, setUserGrade] = React.useState<string | null>(null);
   React.useEffect(() => {
     console.log(pathname);
     if (pathname===("/Main")||pathname===("/")||pathname===("/dashboard")) {
@@ -250,9 +117,8 @@ function DemoPageContent({ pathname, session, children }: IPage) {
     } else {
       setCurrentChildren(null);
     }
-    
-   
   }, [pathname, children]);
+
   return (
     <Box
       sx={{
@@ -310,14 +176,16 @@ function DemoPageContent({ pathname, session, children }: IPage) {
       {pathname === "/orders" && <OrderGrid />}
       {/* 오더 관리 페이지 */}
       {pathname === "/ordersAdmin" && <OrderAdminGrid />}
+      {/* 차트 전부 나오는 페이지 */}
+      {pathname === "/chart/ChartAll" && <ChartAll />}
       {/* 차트 1번 페이지 */}
-      {pathname === "/Chart1" && <Chart1 />}
+      {pathname === "/chart/Chart1" && <Chart1 />}
       {/* 차트 2번 페이지 */}
-      {pathname === "/Chart2" && <Chart2 />}
+      {pathname === "/chart/Chart2" && <Chart2 />}
       {/* 차트 3번 페이지 */}
-      {pathname === "/Chart3" && <Chart3 />}
+      {pathname === "/chart/Chart3" && <Chart3 />}
       {/* 차트 4번 페이지 */}
-      {pathname === "/Chart4" && <Chart4 />}
+      {pathname === "/chart/Chart4" && <Chart4 />}
       {/* 유저 등급관리 페이지 */}
       {pathname === "/UserGrade" && <UserGradeGrid />}
 
@@ -430,6 +298,12 @@ export default function DashboardLayoutBasic(props: DemoProps) {
   const { children, window } = props;
   const [pathname, setPathname] = React.useState("/dashboard");
   const demoWindow = window !== undefined ? window() : undefined;
+  const [userGrade, setUserGrade] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const grade = sessionStorage.getItem('userGrade');
+    setUserGrade(grade);
+  }, []);
 
   const [session, setSession] = React.useState<{
     user: {
@@ -463,6 +337,147 @@ export default function DashboardLayoutBasic(props: DemoProps) {
     }
   }, [router]);
 
+  const NAVIGATION: Navigation = [
+    {
+      kind: "header",
+      title: "로그인 정보",
+    },
+    {
+      segment: "signup",
+      title: "회원 가입",
+      icon: <LockOpenIcon />,
+    },
+    {
+      segment: "login",
+      title: "로그인",
+      icon: <LoginIcon />,
+    },
+    {
+      segment: "logout",
+      title: "로그아웃",
+      icon: <LogoutIcon />,
+    },
+    {
+      kind: "divider",
+    },
+    {
+      kind: "header",
+      title: "판매 물품",
+    },
+    
+    ...(userGrade ==='0' ?[{segment: "productCreate",
+      title: "물품등록",
+      icon: <InputIcon />,}]:[]),
+    
+    {
+      segment: "product",
+      title: "판매 물품",
+      icon: <StoreIcon />,
+      children: [
+        {
+          segment: "all",
+          title: "전체",
+          icon: <ShopIcon />,
+        },
+        {
+          segment: "grocery",
+          title: "식품",
+          icon: <RestaurantIcon />,
+        },
+        {
+          segment: "furniture",
+          title: "가구",
+          icon: <ChairIcon />,
+        },
+        {
+          segment: "elect",
+          title: "전자 제품",
+          icon: <ComputerIcon />,
+        },
+        {
+          segment: "toy",
+          title: "완구",
+          icon: <ToysIcon />,
+        },
+      ],
+    },
+  
+    {
+      kind: "divider",
+    },
+    {
+      kind: "header",
+      title: "주문 및 카트",
+    },
+    {
+      segment: "carts",
+      title: "카트",
+      icon: <ShoppingCartIcon />,
+    },
+    {
+      segment: "orders",
+      title: "주문",
+      icon: <ShoppingBagIcon />,
+    },
+     
+    ...(userGrade ==='0' ?[{segment: "ordersAdmin",
+      title: "주문관리",
+      icon: <ShoppingBagIcon />,}]:[]),
+    
+    
+    {
+      segment: "addressCreate",
+      title: "주소 설정",
+      icon: <HomeIcon />,
+    },
+    {
+      kind: "divider",
+    },
+  
+    {
+      kind: "header",
+      title: "통계",
+    },
+    {
+      segment: "chart",
+      title: "통계",
+      icon: <BarChartIcon />,
+      children: [
+        {
+          segment: "ChartAll",
+          title: "차트 All",
+          icon: <SignalCellularAltIcon />,
+        },
+        {
+          segment: "Chart1",
+          title: "차트1",
+          icon: <SignalCellularAltIcon />,
+        },
+        {
+          segment: "Chart2",
+          title: "차트2",
+          icon: <SignalCellularAltIcon />,
+        },
+        {
+          segment: "Chart3",
+          title: "차트3",
+          icon: <SignalCellularAltIcon />,
+        },
+        {
+          segment: "Chart4",
+          title: "차트4",
+          icon: <SignalCellularAltIcon />,
+        },
+      ],
+    },
+    {
+      kind: "divider",
+    },
+    ...(userGrade ==='0' ?[{segment: "UserGrade",
+      title: "유저 등급 변경",
+      icon: <ManageAccountsIcon />,}]:[]),
+    
+  ];
   return (
     <AppProvider
       navigation={NAVIGATION}
